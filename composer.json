@@ -1,5 +1,5 @@
 {
-    "name": "tigron/ups",
+    "name": "tigron/shipping-ups",
     "description": "Tigron Ups",
     "type": "library",
     "require": {
