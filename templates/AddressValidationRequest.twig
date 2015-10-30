@@ -1,0 +1,13 @@
+{% extends "base.twig" %}
+{% block content %}
+<AddressValidationRequest xml:lang="en-US">
+   <Request>
+      <RequestAction>AV</RequestAction>
+   </Request>
+   <Address>
+      <City>{{ city }}</City>
+      <PostalCode>{{ zipcode }}</PostalCode>
+      <CountryCode>{{ country }}</CountryCode>
+   </Address>
+</AddressValidationRequest>
+{% endblock content %}

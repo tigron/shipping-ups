@@ -1,0 +1,20 @@
+{
+    "name": "tigron/ups",
+    "description": "Tigron Ups",
+    "type": "library",
+    "require": {
+		"tigron/skeleton-template": "dev-master",
+		"tigron/skeleton-template-twig": "dev-master"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tigron BVBA",
+            "email": "support@tigron.be"
+        }
+    ],
+    "autoload": {
+        "psr-4": { "Tigron\\Ups\\": "lib/Ups/" }
+    }
+
+}

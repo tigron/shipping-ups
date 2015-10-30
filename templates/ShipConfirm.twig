@@ -1,0 +1,109 @@
+{% extends "base.twig" %}
+{% block content %}
+<ShipmentConfirmRequest xml:lang="en-US">
+	<Request>
+		<TransactionReference>
+			<CustomerContext>Customer Comment</CustomerContext>
+			<XpciVersion/>
+		</TransactionReference>
+		<RequestAction>ShipConfirm</RequestAction>
+		<RequestOption>validate</RequestOption>
+	</Request>
+
+	<LabelSpecification>
+		<LabelPrintMethod>
+			<Code>GIF</Code>
+			<Description>gif file</Description>
+		</LabelPrintMethod>
+		<HTTPUserAgent>Mozilla/4.5</HTTPUserAgent>
+		<LabelImageFormat>
+			<Code>GIF</Code>
+			<Description>gif</Description>
+		</LabelImageFormat>
+	</LabelSpecification>
+
+	<Shipment>
+		<RateInformation>
+			<NegotiatedRatesIndicator/>
+		</RateInformation>
+
+		<Description/>
+
+		<Shipper>
+			<Name>{{ shipper.company }}</Name>
+			<PhoneNumber>{{ shipper.phone }}</PhoneNumber>
+			<ShipperNumber>{{ user_id }}</ShipperNumber>
+			<TaxIdentificationNumber>{{ shipper.vat }}</TaxIdentificationNumber>
+			<Address>
+				<AddressLine1>{{ shipper.address.street }} {{ shipper.address.housenumber }}</AddressLine1>
+				<City>{{ shipper.address.city }}</City>
+				<PostalCode>{{ shipper.address.zipcode }}</PostalCode>
+				<CountryCode>{{ shipper.address.country }}</CountryCode>
+			 </Address>
+		</Shipper>
+
+		<ShipTo>
+			<CompanyName>{{ recipient.company }}</CompanyName>
+			<AttentionName>{{ recipient.firstname }} {{ recipient.lastname }}</AttentionName>
+			<PhoneNumber>{{ recipient.phone }}</PhoneNumber>
+			<Address>
+				<AddressLine1>{{ recipient.address.street }} {{ recipient.address.housenumber }}</AddressLine1>
+				<City>{{ recipient.address.city }}</City>
+				<StateProvinceCode>FL</StateProvinceCode>
+				<PostalCode>{{ recipient.address.zipcode }}</PostalCode>
+				<CountryCode>{{ recipient.address.country }}</CountryCode>
+			</Address>
+		</ShipTo>
+
+		<ShipFrom>
+			<CompanyName>{{ shipper.company }}</CompanyName>
+			<AttentionName>{{ shipper.firstname }} {{ shipper.lastname }}</AttentionName>
+			<PhoneNumber>{{ shipper.phone }}</PhoneNumber>
+			<TaxIdentificationNumber>{{ shipper.vat }}</TaxIdentificationNumber>
+			<Address>
+				<AddressLine1>{{ shipper.address.street }} {{ shipper.address.housenumber }}</AddressLine1>
+				<City>{{ shipper.address.city }}</City>
+				<PostalCode>{{ shipper.address.zipcode }}</PostalCode>
+				<CountryCode>{{ shipper.address.country }}</CountryCode>
+			</Address>
+		</ShipFrom>
+
+		 <PaymentInformation>
+			<Prepaid>
+				<BillShipper>
+					<AccountNumber>{{ user_id }}</AccountNumber>
+				</BillShipper>
+			</Prepaid>
+		</PaymentInformation>
+
+		<Service>
+			<Code>{{ service.code }}</Code>
+			<Description>{{ service.name }}</Description>
+		</Service>
+
+		{% for package in packages %}
+			<Package>
+				<PackagingType>
+					<Code>{{ package.type.code }}</Code>
+					<Description>{{ package.type.name }}</Description>
+				</PackagingType>
+
+				<Description>{{ package.description }}</Description>
+
+				<PackageWeight>
+					<UnitOfMeasurement/>
+					<Weight>{{ package.weight }}</Weight>
+				</PackageWeight>
+
+				{% if package.large %}
+					<LargePackageIndicator/>
+				{% endif %}
+				{% if package.additional_handling %}
+					<AdditionalHandling />
+				{% endif %}
+			</Package>
+		{% endfor %}
+
+	</Shipment>
+</ShipmentConfirmRequest>
+{% endblock content %}
