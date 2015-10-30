@@ -2,7 +2,7 @@
     "name": "tigron/shipping-ups",
     "description": "Tigron Ups",
     "type": "library",
-    "require": {
+    "require-dev": {
 		"tigron/skeleton-template": "dev-master",
 		"tigron/skeleton-template-twig": "dev-master"
     },
