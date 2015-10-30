@@ -3,8 +3,8 @@
     "description": "Tigron Ups",
     "type": "library",
     "require": {
-		"tigron/skeleton-template": "dev-master",
-		"tigron/skeleton-template-twig": "dev-master"
+		"tigron/skeleton-template": "*",
+		"tigron/skeleton-template-twig": "*"
     },
     "license": "MIT",
     "authors": [
