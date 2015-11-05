@@ -26,6 +26,7 @@ class Shipping extends Client {
 		$this->assign('packages', $packages);
 		$this->assign('service', $service);
 		$xml = $this->template->render('ShipConfirm.twig');
+
 		$result = $this->call('ShipConfirm', $xml);
 		return $result;
 	}

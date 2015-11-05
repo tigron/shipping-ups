@@ -64,6 +64,7 @@ class Client {
 		if (Config::$mode == 'test') {
 			curl_setopt($ch,CURLOPT_URL, 'https://wwwcie.ups.com/ups.app/xml/' . $endpoint);
 		} else {
+			curl_setopt($ch,CURLOPT_URL, 'https://onlinetools.ups.com/ups.app/xml/' . $endpoint);
 			// do live call here
 		}
 

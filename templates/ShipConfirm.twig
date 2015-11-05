@@ -27,10 +27,11 @@
 			<NegotiatedRatesIndicator/>
 		</RateInformation>
 
-		<Description/>
+		<Description>{{ packages.0.description }}</Description>
 
 		<Shipper>
 			<Name>{{ shipper.company }}</Name>
+			<AttentionName>{{ shipper.firstname }} {{ shipper.lastname }}</AttentionName>
 			<PhoneNumber>{{ shipper.phone }}</PhoneNumber>
 			<ShipperNumber>{{ user_id }}</ShipperNumber>
 			<TaxIdentificationNumber>{{ shipper.vat }}</TaxIdentificationNumber>
