@@ -44,7 +44,11 @@
 		</Shipper>
 
 		<ShipTo>
-			<CompanyName>{{ recipient.company }}</CompanyName>
+			{% if recipient.company == '' %}
+				<CompanyName>{{ recipient.firstname }} {{ recipient.last }}</CompanyName>
+			{% else %}
+				<CompanyName>{{ recipient.company }}</CompanyName>
+			{% endif %}
 			<AttentionName>{{ recipient.firstname }} {{ recipient.lastname }}</AttentionName>
 			<PhoneNumber>{{ recipient.phone }}</PhoneNumber>
 			<Address>
