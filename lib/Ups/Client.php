@@ -62,12 +62,17 @@ class Client {
 		$ch = curl_init();
 
 		if (Config::$mode == 'test') {
-			curl_setopt($ch,CURLOPT_URL, 'https://wwwcie.ups.com/ups.app/xml/' . $endpoint);
+			$url = 'https://wwwcie.ups.com/ups.app/xml/' . $endpoint;
 		} else {
-			curl_setopt($ch,CURLOPT_URL, 'https://onlinetools.ups.com/ups.app/xml/' . $endpoint);
-			// do live call here
+			$url = 'https://onlinetools.ups.com/ups.app/xml/' . $endpoint;
 		}
 
+		$log  = 'New request to: ' . $url . "\n";
+		$log .= 'Date: ' . date('Y-m-d H:i:s') . "\n";
+		$log .= 'Sending XML: ' . "\n";
+		$log .= $xml . "\n";
+
+		curl_setopt($ch,CURLOPT_URL, $url);
 		curl_setopt($ch,CURLOPT_POST, 1);
 		curl_setopt($ch,CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded; charset=utf-8'));
 		curl_setopt($ch,CURLOPT_POSTFIELDS, $xml);
@@ -75,6 +80,12 @@ class Client {
 
 		//execute post
 		$result = curl_exec($ch);
+		$log .= 'Response: ' . $result . "\n\n\n";
+
+		if (Config::$logfile !== null) {
+			file_put_contents(Config::$logfile, $log, FILE_APPEND);
+		}
+
 		$result = $this->xml_to_array($result);
 		if ($result['Response']['ResponseStatusCode'] == 0) {
 			throw new \Exception('Error ' . $result['Response']['Error']['ErrorCode'] . ': ' . $result['Response']['Error']['ErrorDescription']);

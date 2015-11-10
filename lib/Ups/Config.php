@@ -49,4 +49,12 @@ class Config {
 	 */
 	public static $mode = 'test';
 
+	/**
+	 * Log file
+	 *
+	 * @access public
+	 * @var string $logfile
+	 */
+	public static $logfile = null;
+
 }
