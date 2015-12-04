@@ -91,6 +91,15 @@
 			<Description>{{ service.name }}</Description>
 		</Service>
 
+		<ShipmentServiceOptions>
+			<Notification>
+				<NotificationCode>6</NotificationCode>
+				<EmailMessage>
+					<EmailAddress>{{ recipient.email }}</EmailAddress>
+				</EmailMessage>
+			</Notification>
+		</ShipmentServiceOptions>
+
 		{% for package in packages %}
 			<Package>
 				<PackagingType>
