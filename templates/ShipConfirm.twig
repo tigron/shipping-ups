@@ -45,16 +45,21 @@
 
 		<ShipTo>
 			{% if recipient.company == '' %}
-				<CompanyName>{{ recipient.firstname }} {{ recipient.last }}</CompanyName>
+				<CompanyName>{{ (recipient.firstname ~ ' ' ~ recipient.last)|truncate(35, false, '') }}</CompanyName>
 			{% else %}
-				<CompanyName>{{ recipient.company }}</CompanyName>
+				<CompanyName>{{ recipient.company|truncate(35, false, '') }}</CompanyName>
 			{% endif %}
-			<AttentionName>{{ recipient.firstname }} {{ recipient.lastname }}</AttentionName>
+			<AttentionName>{{ (recipient.firstname ~ ' ' ~ recipient.last)|truncate(35, false, '') }}</AttentionName>
 			<PhoneNumber>{{ recipient.phone }}</PhoneNumber>
+			{% if recipient.email != '' %}
+				<EmailAddress>{{ recipient.email|truncate(50, false, '') }}</EmailAddress>
+			{% endif %}
 			<Address>
-				<AddressLine1>{{ recipient.address.street }} {{ recipient.address.housenumber }}</AddressLine1>
-				<City>{{ recipient.address.city }}</City>
-				<StateProvinceCode>FL</StateProvinceCode>
+				<AddressLine1>{{ (recipient.address.street ~ ' ' ~ recipient.address.housenumber)|truncate(35, false, '') }}</AddressLine1>
+				<City>{{ recipient.address.city|truncate(30, false, '') }}</City>
+				{% if recipient.address.country == 'US' %}
+					<StateProvinceCode>{{ recipient.address.get_us_state() }}</StateProvinceCode>
+				{% endif %}
 				<PostalCode>{{ recipient.address.zipcode }}</PostalCode>
 				<CountryCode>{{ recipient.address.country }}</CountryCode>
 			</Address>

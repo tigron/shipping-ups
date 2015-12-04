@@ -51,4 +51,24 @@ class Address {
 	 * @access public
 	 */
 	public $country = '';
+
+	/**
+	 * Get US_State
+	 *
+	 * @access public
+	 * @return string $state
+	 */
+	public function get_us_state() {
+		if ($this->country != 'US') {
+			throw new \Exception('Cannot get state for country other than US');
+		}
+
+		include dirname(__FILE__) . '/../../assets/city_us.php';
+		foreach ($us_city as $city) {
+			if ($city['zip'] == $this->zipcode) {
+				return $city['state'];
+			}
+		}
+		throw new \Exception('No state found for city with zipcode ' . $this->zipcode);
+	}
 }
