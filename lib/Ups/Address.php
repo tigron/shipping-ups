@@ -13,20 +13,28 @@ namespace Tigron\Ups;
 class Address {
 
 	/**
-	 * Street
+	 * Line 1
 	 *
-	 * @var string $street
+	 * @var string $line1
 	 * @access public
 	 */
-	public $street = '';
+	public $line1 = '';
 
 	/**
-	 * Housenumber
+	 * Line 2
 	 *
-	 * @var string $housenumber
+	 * @var string $line1
 	 * @access public
 	 */
-	public $housenumber = '';
+	public $line2 = '';
+
+	/**
+	 * Line 3
+	 *
+	 * @var string $line1
+	 * @access public
+	 */
+	public $line3 = '';
 
 	/**
 	 * Zipcode
@@ -70,5 +78,43 @@ class Address {
 			}
 		}
 		throw new \Exception('No state found for city with zipcode ' . $this->zipcode);
+	}
+
+	/**
+	 * Validate
+	 *
+	 * @access public
+	 * @param array $errors
+	 * @return bool $validated
+	 */
+	public function validate(&$errors) {
+		$errors = [];
+
+		if (!empty($this->line1)) {
+			if (strlen( trim($this->line1) ) > 35) {
+				$errors['line1'] = true;
+			}
+			if (strlen( trim($this->line2) ) > 35) {
+				$errors['line2'] = true;
+			}
+			if (strlen( trim($this->line3) ) > 35) {
+				$errors['line3'] = true;
+			}
+
+		}
+
+		if (empty($this->city)) {
+			$errors['city'] = true;
+		}
+
+		if (empty($this->zipcode)) {
+			$errors['zipcode'] = true;
+		}
+
+		if (count($errors) > 0) {
+			return false;
+		}
+
+		return true;
 	}
 }

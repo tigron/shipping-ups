@@ -36,7 +36,7 @@
 			<ShipperNumber>{{ user_id }}</ShipperNumber>
 			<TaxIdentificationNumber>{{ shipper.vat }}</TaxIdentificationNumber>
 			<Address>
-				<AddressLine1>{{ shipper.address.street }} {{ shipper.address.housenumber }}</AddressLine1>
+				<AddressLine1>{{ shipper.address.line1 }}</AddressLine1>
 				<City>{{ shipper.address.city }}</City>
 				<PostalCode>{{ shipper.address.zipcode }}</PostalCode>
 				<CountryCode>{{ shipper.address.country }}</CountryCode>
@@ -45,17 +45,25 @@
 
 		<ShipTo>
 			{% if recipient.company == '' %}
-				<CompanyName>{{ (recipient.firstname ~ ' ' ~ recipient.last)|truncate(35, false, '') }}</CompanyName>
+				<CompanyName>{{ (recipient.firstname ~ ' ' ~ recipient.lastname)|truncate(35, false, '') }}</CompanyName>
 			{% else %}
 				<CompanyName>{{ recipient.company|truncate(35, false, '') }}</CompanyName>
 			{% endif %}
-			<AttentionName>{{ (recipient.firstname ~ ' ' ~ recipient.last)|truncate(35, false, '') }}</AttentionName>
+			<AttentionName>{{ (recipient.firstname ~ ' ' ~ recipient.lastname)|truncate(35, false, '') }}</AttentionName>
 			<PhoneNumber>{{ recipient.phone }}</PhoneNumber>
 			{% if recipient.email != '' %}
 				<EmailAddress>{{ recipient.email|truncate(50, false, '') }}</EmailAddress>
 			{% endif %}
 			<Address>
-				<AddressLine1>{{ (recipient.address.street ~ ' ' ~ recipient.address.housenumber)|truncate(35, false, '') }}</AddressLine1>
+				{% if recipient.address.line1 != '' %}
+					<AddressLine1>{{ recipient.address.line1|truncate(35, false, '') }}</AddressLine1>
+				{% endif %}
+				{% if recipient.address.line2 != '' %}
+					<AddressLine2>{{ recipient.address.line2|truncate(35, false, '') }}</AddressLine2>
+				{% endif %}
+				{% if recipient.address.line3 != '' %}
+					<AddressLine3>{{ recipient.address.line3|truncate(35, false, '') }}</AddressLine3>
+				{% endif %}
 				<City>{{ recipient.address.city|truncate(30, false, '') }}</City>
 				{% if recipient.address.country == 'US' %}
 					<StateProvinceCode>{{ recipient.address.get_us_state() }}</StateProvinceCode>
@@ -71,7 +79,7 @@
 			<PhoneNumber>{{ shipper.phone }}</PhoneNumber>
 			<TaxIdentificationNumber>{{ shipper.vat }}</TaxIdentificationNumber>
 			<Address>
-				<AddressLine1>{{ shipper.address.street }} {{ shipper.address.housenumber }}</AddressLine1>
+				<AddressLine1>{{ shipper.address.line1 }}</AddressLine1>
 				<City>{{ shipper.address.city }}</City>
 				<PostalCode>{{ shipper.address.zipcode }}</PostalCode>
 				<CountryCode>{{ shipper.address.country }}</CountryCode>

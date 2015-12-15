@@ -18,8 +18,6 @@ class AddressValidation extends Client {
 	 * @return array $response
 	 */
 	public function validate(Address $address) {
-		$this->assign('street', $address->street);
-		$this->assign('housenumber', $address->housenumber);
 		$this->assign('zipcode', $address->zipcode);
 		$this->assign('city', $address->city);
 		$this->assign('country', $address->country);
