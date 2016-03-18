@@ -34,6 +34,27 @@ PHP library to allow shipping via UPS
 	$shipper->address = $shipper_address;
 
 	/**
+	 * Define the ship from address
+	 */
+	$ship_from_address = new \Tigron\Ups\Address();
+	$ship_from_address->line1 = 'street 1';
+	$ship_from_address->line2 = 'additional line';
+	$ship_from_address->line3 = 'additional line';
+	$ship_from_address->zipcode = '12345';
+	$ship_from_address->city = 'City';
+	$ship_from_address->country = 'BE'; 	// ISO2 country code
+
+	$ship_from = new \Tigron\Ups\Contact();
+	$ship_from->company = 'Company name';
+	$ship_from->firstname = 'Recipient firstname';
+	$ship_from->lastname = 'Recipient lastname';
+	$ship_from->phone = '+32.1234567';
+	$ship_from->fax = '+32.1234567';
+	$ship_from->email = 'info@example.com';
+	$ship_from->vat = '000000000';
+	$ship_from->address = $ship_from_address;
+
+	/**
 	 * Define the Recipient
 	 */
     $address = new \Tigron\Ups\Address();
