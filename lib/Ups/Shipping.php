@@ -20,8 +20,13 @@ class Shipping extends Client {
 	 * @param \Tigron\Ups\Service $service
 	 * @return array $response
 	 */
-	public function confirm(\Tigron\Ups\Contact $shipper, \Tigron\Ups\Contact $recipient, $packages, \Tigron\Ups\Service $service) {
+	public function confirm(\Tigron\Ups\Contact $shipper, \Tigron\Ups\Contact $recipient, $packages, \Tigron\Ups\Service $service, \Tigron\Ups\Contact $ship_from = null) {
 		$this->assign('shipper', $shipper);
+		if ($ship_from === null) {
+			$this->assign('ship_from', $shipper);
+		} else {
+			$this->assign('ship_from', $ship_from);
+		}
 		$this->assign('recipient', $recipient);
 		$this->assign('packages', $packages);
 		$this->assign('service', $service);

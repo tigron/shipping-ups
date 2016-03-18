@@ -74,15 +74,15 @@
 		</ShipTo>
 
 		<ShipFrom>
-			<CompanyName>{{ shipper.company }}</CompanyName>
-			<AttentionName>{{ shipper.firstname }} {{ shipper.lastname }}</AttentionName>
-			<PhoneNumber>{{ shipper.phone }}</PhoneNumber>
-			<TaxIdentificationNumber>{{ shipper.vat }}</TaxIdentificationNumber>
+			<CompanyName>{{ ship_from.company }}</CompanyName>
+			<AttentionName>{{ ship_from.firstname }} {{ ship_from.lastname }}</AttentionName>
+			<PhoneNumber>{{ ship_from.phone }}</PhoneNumber>
+			<TaxIdentificationNumber>{{ ship_from.vat }}</TaxIdentificationNumber>
 			<Address>
-				<AddressLine1>{{ shipper.address.line1 }}</AddressLine1>
-				<City>{{ shipper.address.city }}</City>
-				<PostalCode>{{ shipper.address.zipcode }}</PostalCode>
-				<CountryCode>{{ shipper.address.country }}</CountryCode>
+				<AddressLine1>{{ ship_from.address.line1 }}</AddressLine1>
+				<City>{{ ship_from.address.city }}</City>
+				<PostalCode>{{ ship_from.address.zipcode }}</PostalCode>
+				<CountryCode>{{ ship_from.address.country }}</CountryCode>
 			</Address>
 		</ShipFrom>
 
