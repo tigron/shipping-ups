@@ -1,0 +1,115 @@
+{% extends "base.twig" %}
+{% block content %}
+<RatingServiceSelectionRequest xml:lang="en-US">
+	<Request>
+		<TransactionReference>
+			<CustomerContext>Customer Comment</CustomerContext>
+			<XpciVersion/>
+		</TransactionReference>
+		<RequestAction>Rate</RequestAction>
+		<RequestOption>Rate</RequestOption>
+	</Request>
+
+	<Shipment>
+		<RateInformation>
+			<NegotiatedRatesIndicator/>
+		</RateInformation>
+
+		<Description>{{ packages.0.description }}</Description>
+
+		<Shipper>
+			<Name>{{ shipper.company }}</Name>
+			<AttentionName>{{ shipper.firstname }} {{ shipper.lastname }}</AttentionName>
+			<PhoneNumber>{{ shipper.phone }}</PhoneNumber>
+			<ShipperNumber>{{ user_id }}</ShipperNumber>
+			<TaxIdentificationNumber>{{ shipper.vat }}</TaxIdentificationNumber>
+			<Address>
+				<AddressLine1>{{ shipper.address.line1 }}</AddressLine1>
+				<City>{{ shipper.address.city }}</City>
+				<PostalCode>{{ shipper.address.zipcode }}</PostalCode>
+				<CountryCode>{{ shipper.address.country }}</CountryCode>
+			 </Address>
+		</Shipper>
+
+		<ShipTo>
+			{% if recipient.company == '' %}
+				<CompanyName>{{ (recipient.firstname ~ ' ' ~ recipient.lastname)|truncate(35, false, '') }}</CompanyName>
+			{% else %}
+				<CompanyName>{{ recipient.company|truncate(35, false, '') }}</CompanyName>
+			{% endif %}
+			<AttentionName>{{ (recipient.firstname ~ ' ' ~ recipient.lastname)|truncate(35, false, '') }}</AttentionName>
+			<PhoneNumber>{{ recipient.phone }}</PhoneNumber>
+			{% if recipient.email != '' %}
+				<EmailAddress>{{ recipient.email|truncate(50, false, '') }}</EmailAddress>
+			{% endif %}
+			<Address>
+				{% if recipient.address.line1 != '' %}
+					<AddressLine1>{{ recipient.address.line1|truncate(35, false, '') }}</AddressLine1>
+				{% endif %}
+				{% if recipient.address.line2 != '' %}
+					<AddressLine2>{{ recipient.address.line2|truncate(35, false, '') }}</AddressLine2>
+				{% endif %}
+				{% if recipient.address.line3 != '' %}
+					<AddressLine3>{{ recipient.address.line3|truncate(35, false, '') }}</AddressLine3>
+				{% endif %}
+				<City>{{ recipient.address.city|truncate(30, false, '') }}</City>
+				{% if recipient.address.country == 'US' %}
+					<StateProvinceCode>{{ recipient.address.get_us_state() }}</StateProvinceCode>
+				{% endif %}
+				<PostalCode>{{ recipient.address.zipcode }}</PostalCode>
+				<CountryCode>{{ recipient.address.country }}</CountryCode>
+			</Address>
+		</ShipTo>
+
+		<ShipFrom>
+			<CompanyName>{{ ship_from.company }}</CompanyName>
+			<AttentionName>{{ ship_from.firstname }} {{ ship_from.lastname }}</AttentionName>
+			<PhoneNumber>{{ ship_from.phone }}</PhoneNumber>
+			<TaxIdentificationNumber>{{ ship_from.vat }}</TaxIdentificationNumber>
+			<Address>
+				<AddressLine1>{{ ship_from.address.line1 }}</AddressLine1>
+				<City>{{ ship_from.address.city }}</City>
+				<PostalCode>{{ ship_from.address.zipcode }}</PostalCode>
+				<CountryCode>{{ ship_from.address.country }}</CountryCode>
+			</Address>
+		</ShipFrom>
+
+		 <PaymentInformation>
+			<Prepaid>
+				<BillShipper>
+					<AccountNumber>{{ user_id }}</AccountNumber>
+				</BillShipper>
+			</Prepaid>
+		</PaymentInformation>
+
+		<Service>
+			<Code>{{ service.code }}</Code>
+			<Description>{{ service.name }}</Description>
+		</Service>
+
+		{% for package in packages %}
+			<Package>
+				<PackagingType>
+					<Code>{{ package.type.code }}</Code>
+					<Description>{{ package.type.name }}</Description>
+				</PackagingType>
+
+				<Description>{{ package.description }}</Description>
+
+				<PackageWeight>
+					<UnitOfMeasurement/>
+					<Weight>{{ package.weight }}</Weight>
+				</PackageWeight>
+
+				{% if package.large %}
+					<LargePackageIndicator/>
+				{% endif %}
+				{% if package.additional_handling %}
+					<AdditionalHandling />
+				{% endif %}
+			</Package>
+		{% endfor %}
+
+	</Shipment>
+</RatingServiceSelectionRequest>
+{% endblock content %}
