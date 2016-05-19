@@ -77,6 +77,14 @@ class Contact {
 	public $vat = '';
 
 	/**
+	 * Number
+	 *
+	 * @access public
+	 * @var string $number
+	 */
+	public $number = '';
+
+	/**
 	 * Validate
 	 *
 	 * @access public
@@ -109,5 +117,32 @@ class Contact {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Render
+	 *
+	 * @access public
+	 * @return string $xml
+	 */
+	public function render() {
+		$template = Template::get();
+		$template->assign('contact', $this);
+		return $template->render('object/contact.twig');
+	}
+
+	/**
+	 * Render shipper
+	 *
+	 * For some reason, UPS uses another XML schema for a shipper
+	 * The data is identical but field names are different
+	 *
+	 * @access public
+	 * @return string $xml
+	 */
+	public function render_shipper() {
+		$template = Template::get();
+		$template->assign('contact', $this);
+		return $template->render('object/shipper.twig');
 	}
 }

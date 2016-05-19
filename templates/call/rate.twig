@@ -1,0 +1,53 @@
+{% extends "base.twig" %}
+{% block content %}
+<RatingServiceSelectionRequest xml:lang="en-US">
+	<Request>
+		<TransactionReference>
+			<CustomerContext>Customer Comment</CustomerContext>
+			<XpciVersion/>
+		</TransactionReference>
+		<RequestAction>Rate</RequestAction>
+		<RequestOption>Rate</RequestOption>
+	</Request>
+
+	<Shipment>
+		<RateInformation>
+			<NegotiatedRatesIndicator/>
+		</RateInformation>
+
+		<Description>{{ packages.0.description }}</Description>
+
+		<Shipper>
+			{{ shipper.render_shipper()|raw }}
+		</Shipper>
+
+		<ShipTo>
+			{{ recipient.render()|raw }}
+		</ShipTo>
+
+		<ShipFrom>
+			{{ ship_from.render()|raw }}
+		</ShipFrom>
+
+		 <PaymentInformation>
+			<Prepaid>
+				<BillShipper>
+					<AccountNumber>{{ user_id }}</AccountNumber>
+				</BillShipper>
+			</Prepaid>
+		</PaymentInformation>
+
+		<Service>
+			<Code>{{ service.code }}</Code>
+			<Description>{{ service.name }}</Description>
+		</Service>
+
+		{% for package in packages %}
+			<Package>
+				{{ package.render()|raw }}
+			</Package>
+		{% endfor %}
+
+	</Shipment>
+</RatingServiceSelectionRequest>
+{% endblock content %}

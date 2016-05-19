@@ -20,17 +20,23 @@ class Shipping extends Client {
 	 * @param \Tigron\Ups\Service $service
 	 * @return array $response
 	 */
-	public function confirm(\Tigron\Ups\Contact $shipper, \Tigron\Ups\Contact $recipient, $packages, \Tigron\Ups\Service $service, \Tigron\Ups\Contact $ship_from = null) {
-		$this->assign('shipper', $shipper);
+	public function confirm(\Tigron\Ups\Contact $shipper, \Tigron\Ups\Contact $recipient, $packages, \Tigron\Ups\Service $service, \Tigron\Ups\Contact $ship_from = null, $notifications = []) {
+		$template = Template::get();
+		$template->assign('shipper', $shipper);
 		if ($ship_from === null) {
-			$this->assign('ship_from', $shipper);
+			$template->assign('ship_from', $shipper);
 		} else {
-			$this->assign('ship_from', $ship_from);
+			$template->assign('ship_from', $ship_from);
 		}
-		$this->assign('recipient', $recipient);
-		$this->assign('packages', $packages);
-		$this->assign('service', $service);
-		$xml = $this->template->render('ShipConfirm.twig');
+		$template->assign('recipient', $recipient);
+		$template->assign('packages', $packages);
+		$template->assign('service', $service);
+		if (!is_array($notifications)) {
+			$template->assign('notifications', [ $notifications ]);
+		} else {
+			$template->assign('notifications', $notifications);
+		}
+		$xml = $template->render('call/ShipConfirm.twig');
 
 		$result = $this->call('ShipConfirm', $xml);
 		return $result;
@@ -43,8 +49,9 @@ class Shipping extends Client {
 	 * @param string $digest
 	 */
 	public function accept($digest) {
-		$this->assign('digest', $digest);
-		$xml = $this->template->render('ShipAccept.twig');
+		$template = Template::get();
+		$template->assign('digest', $digest);
+		$xml = $template->render('call/ShipAccept.twig');
 		$result = $this->call('ShipAccept', $xml);
 		return $result;
 	}
@@ -56,12 +63,11 @@ class Shipping extends Client {
 	 * @param string $tracking
 	 */
 	public function get_label($tracking) {
-		$this->assign('tracking', $tracking);
-		$xml = $this->template->render('LabelRecovery.twig');
-		echo $xml;
+		$template = Template::get();
+		$template->assign('tracking', $tracking);
+		$xml = $template->render('call/LabelRecovery.twig');
 		$result = $this->call('LabelRecovery', $xml);
 
 		return $result;
 	}
-
 }

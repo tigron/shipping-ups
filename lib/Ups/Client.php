@@ -12,41 +12,11 @@ namespace Tigron\Ups;
 class Client {
 
 	/**
-	 * \Skeleton\Template\Template object
-	 *
-	 * @access protected
-	 * @var $template
-	 */
-	protected $template;
-
-	/**
 	 * Constructor
 	 *
 	 * @access public
 	 */
 	public function __construct() {
-
-		// Initialize a template object
-		$this->template = new \Skeleton\Template\Template();
-
-		// Set the template path
-		$this->template->set_template_directory(dirname(__FILE__) . '/../../templates');
-
-		// Assign variables
-		$this->template->assign('license_number', \Tigron\Ups\Config::$license_number);
-		$this->template->assign('user_id', \Tigron\Ups\Config::$user_id);
-		$this->template->assign('password', \Tigron\Ups\Config::$password);
-	}
-
-	/**
-	 * Assign
-	 *
-	 * @access public
-	 * @param string $key
-	 * @param mixed $value
-	 */
-	public function assign($key, $value) {
-		$this->template->assign($key, $value);
 	}
 
 	/**

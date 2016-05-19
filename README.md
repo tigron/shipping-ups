@@ -103,10 +103,17 @@ PHP library to allow shipping via UPS
 	$service->code = 65;
 
 	/**
+	 * Add notifications
+	 */
+	$notification = new \Tigron\Ups\Notification();
+	$notification->code = 2;
+	$notification->email_addresses = [ 'test@example.com' ];
+
+	/**
 	 * Ship
 	 */
 	$shipping = new \Tigron\Ups\Shipping();
-	$result = $shipping->confirm($shipper, $recipient, [ $package ], $service);
+	$result = $shipping->confirm($shipper, $recipient, [ $package ], $service, $ship_from, $notification );
 	$accept_result = $shipping->accept($result['ShipmentDigest']);
 
 	/**

@@ -1,0 +1,15 @@
+{% if address.line1 != '' %}
+	<AddressLine1>{{ address.line1|truncate(35, false, '') }}</AddressLine1>
+{% endif %}
+{% if address.line2 != '' %}
+	<AddressLine2>{{ address.line2|truncate(35, false, '') }}</AddressLine2>
+{% endif %}
+{% if address.line3 != '' %}
+	<AddressLine3>{{ address.line3|truncate(35, false, '') }}</AddressLine3>
+{% endif %}
+<City>{{ address.city|truncate(30, false, '') }}</City>
+{% if address.country == 'US' %}
+	<StateProvinceCode>{{ address.get_us_state() }}</StateProvinceCode>
+{% endif %}
+<PostalCode>{{ address.zipcode }}</PostalCode>
+<CountryCode>{{ address.country }}</CountryCode>

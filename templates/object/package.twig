@@ -1,0 +1,18 @@
+<PackagingType>
+	<Code>{{ package.type.code }}</Code>
+	<Description>{{ package.type.name }}</Description>
+</PackagingType>
+
+<Description>{{ package.description }}</Description>
+
+<PackageWeight>
+	<UnitOfMeasurement/>
+	<Weight>{{ package.weight }}</Weight>
+</PackageWeight>
+
+{% if package.large %}
+	<LargePackageIndicator/>
+{% endif %}
+{% if package.additional_handling %}
+	<AdditionalHandling />
+{% endif %}

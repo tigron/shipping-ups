@@ -18,10 +18,11 @@ class AddressValidation extends Client {
 	 * @return array $response
 	 */
 	public function validate(Address $address) {
-		$this->assign('zipcode', $address->zipcode);
-		$this->assign('city', $address->city);
-		$this->assign('country', $address->country);
-		$xml = $this->template->render('AddressValidationRequest.twig');
+		$template = Template::get();
+		$template('zipcode', $address->zipcode);
+		$template('city', $address->city);
+		$template('country', $address->country);
+		$xml = $template->render('call/AddressValidationRequest.twig');
 		$result = $this->call('AV', $xml);
 		return $result;
 	}

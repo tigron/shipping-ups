@@ -59,4 +59,16 @@ class Package {
 	 */
 	public $additional_handling = false;
 
+	/**
+	 * Render the object
+	 *
+	 * @access public
+	 * @return string $xml
+	 */
+	public function render() {
+		$template = Template::get();
+		$template->assign('package', $this);
+		return $template->render('object/package.twig');
+	}
+
 }

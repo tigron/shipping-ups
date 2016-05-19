@@ -21,16 +21,17 @@ class Rate extends Client {
 	 * @return array $response
 	 */
 	public function rate(\Tigron\Ups\Contact $shipper, \Tigron\Ups\Contact $recipient, $packages, \Tigron\Ups\Service $service, \Tigron\Ups\Contact $ship_from = null) {
-		$this->assign('shipper', $shipper);
+		$template = Template::get();
+		$template->assign('shipper', $shipper);
 		if ($ship_from === null) {
-			$this->assign('ship_from', $shipper);
+			$template->assign('ship_from', $shipper);
 		} else {
-			$this->assign('ship_from', $ship_from);
+			$template->assign('ship_from', $ship_from);
 		}
-		$this->assign('recipient', $recipient);
-		$this->assign('packages', $packages);
-		$this->assign('service', $service);
-		$xml = $this->template->render('rate.twig');
+		$template->assign('recipient', $recipient);
+		$template->assign('packages', $packages);
+		$template->assign('service', $service);
+		$xml = $template->render('call/rate.twig');
 
 		$result = $this->call('Rate', $xml);
 		return $result;

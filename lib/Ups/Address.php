@@ -100,7 +100,6 @@ class Address {
 			if (strlen( trim($this->line3) ) > 35) {
 				$errors['line3'] = true;
 			}
-
 		}
 
 		if (empty($this->city)) {
@@ -116,5 +115,17 @@ class Address {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Render
+	 *
+	 * @access public
+	 * @return string $xml
+	 */
+	public function render() {
+		$template = Template::get();
+		$template->assign('address', $this);
+		return $template->render('object/address.twig');
 	}
 }

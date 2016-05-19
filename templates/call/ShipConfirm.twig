@@ -1,0 +1,73 @@
+{% extends "base.twig" %}
+{% block content %}
+<ShipmentConfirmRequest xml:lang="en-US">
+	<Request>
+		<TransactionReference>
+			<CustomerContext>Customer Comment</CustomerContext>
+			<XpciVersion/>
+		</TransactionReference>
+		<RequestAction>ShipConfirm</RequestAction>
+		<RequestOption>validate</RequestOption>
+	</Request>
+
+	<LabelSpecification>
+		<LabelPrintMethod>
+			<Code>GIF</Code>
+			<Description>gif file</Description>
+		</LabelPrintMethod>
+		<HTTPUserAgent>Mozilla/4.5</HTTPUserAgent>
+		<LabelImageFormat>
+			<Code>GIF</Code>
+			<Description>gif</Description>
+		</LabelImageFormat>
+	</LabelSpecification>
+
+	<Shipment>
+		<RateInformation>
+			<NegotiatedRatesIndicator/>
+		</RateInformation>
+
+		<Description>{{ packages.0.description }}</Description>
+
+		<Shipper>
+			{{ shipper.render_shipper()|raw }}
+		</Shipper>
+
+		<ShipTo>
+			{{ recipient.render()|raw }}
+		</ShipTo>
+
+		<ShipFrom>
+			{{ ship_from.render()|raw }}
+		</ShipFrom>
+
+		 <PaymentInformation>
+			<Prepaid>
+				<BillShipper>
+					<AccountNumber>{{ user_id }}</AccountNumber>
+				</BillShipper>
+			</Prepaid>
+		</PaymentInformation>
+
+		<Service>
+			<Code>{{ service.code }}</Code>
+			<Description>{{ service.name }}</Description>
+		</Service>
+
+		<ShipmentServiceOptions>
+			{% for notification in notifications %}
+				<Notification>
+				{{ notification.render()|raw }}
+				</Notification>
+			{% endfor %}
+		</ShipmentServiceOptions>
+
+		{% for package in packages %}
+			<Package>
+				{{ package.render()|raw }}
+			</Package>
+		{% endfor %}
+
+	</Shipment>
+</ShipmentConfirmRequest>
+{% endblock content %}
