@@ -124,6 +124,24 @@ class Address {
 	 * @return string $xml
 	 */
 	public function render() {
+		/**
+		 * UPS Exceptions
+		 */
+		if ($this->country == 'AT') {
+			if ($this->zipcode == 6691) {
+				$this->zipcode = 87491;
+				$this->country = 'DE';
+			} elseif ($this->zipcode == 6991) {
+				$this->zipcode = 87567;
+				$this->country = 'DE';
+			} elseif ($this->zipcode == 6992) {
+				$this->zipcode = 87568;
+				$this->country = 'DE';
+			} elseif ($this->zipcode == 6993) {
+				$this->zipcode = 87569;
+				$this->country = 'DE';
+			}
+		}
 		$template = Template::get();
 		$template->assign('address', $this);
 		return $template->render('object/address.twig');
