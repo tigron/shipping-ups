@@ -42,14 +42,19 @@ class Client {
 		$log .= 'Sending XML: ' . "\n";
 		$log .= $xml . "\n";
 
-		curl_setopt($ch,CURLOPT_URL, $url);
-		curl_setopt($ch,CURLOPT_POST, 1);
-		curl_setopt($ch,CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded; charset=utf-8'));
-		curl_setopt($ch,CURLOPT_POSTFIELDS, $xml);
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, [ 'Content-Type: application/x-www-form-urlencoded; charset=utf-8' ]);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 5);
 
 		//execute post
 		$result = curl_exec($ch);
+		if ($result === false) {
+			throw new \Exception('Error ' . curl_errno($ch) . ': ' . curl_error($ch));
+		}
+
 		$log .= 'Response: ' . $result . "\n\n\n";
 
 		if (Config::$logfile !== null) {
