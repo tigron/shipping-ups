@@ -1,6 +1,8 @@
 <NotificationCode>{{ notification.code }}</NotificationCode>
 <EMailMessage>
-	{% for email_addresses in notification.email_addresses %}
-		<EMailAddress>{{ email_addresses }}</EMailAddress>
+	{% for email_address in notification.email_addresses %}
+		{% if email_address != '' %}
+			<EMailAddress>{{ email_address }}</EMailAddress>
+		{% endif %}
 	{% endfor %}
 </EMailMessage>
