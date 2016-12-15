@@ -99,7 +99,7 @@ class Contact {
 			$errors['lastname'] = true;
 		}
 
-		if (trim($this->company) != '' AND strlen($this->company) > 35) {
+		if (trim($this->company) != '') {
 			$errors['company'] = true;
 		}
 
