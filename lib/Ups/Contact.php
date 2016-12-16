@@ -99,10 +99,6 @@ class Contact {
 			$errors['lastname'] = true;
 		}
 
-		if (trim($this->company) != '') {
-			$errors['company'] = true;
-		}
-
 		if (trim($this->email) != '' AND strlen($this->email) > 35) {
 			$errors['email'] = true;
 		}
