@@ -1,5 +1,8 @@
+{% extends "base.twig" %}
+{% block content %}
 <AccessRequest xml:lang="en-US">
 	<AccessLicenseNumber>{{ license_number }}</AccessLicenseNumber>
 	<UserId>{{ user_id }}</UserId>
 	<Password>{{ password }}</Password>
 </AccessRequest>
+{% endblock content %}

@@ -37,7 +37,25 @@ class Client {
 			$url = 'https://onlinetools.ups.com/ups.app/xml/' . $endpoint;
 		}
 
-		$log  = 'New request to: ' . $url . "\n";
+		$template = Template::get();
+		$authentication_xml = $template->render('authenticate.twig');
+
+		$dom = new \DomDocument();
+		$dom->preserveWhiteSpace = false;
+		$dom->loadXML($authentication_xml);
+		$dom->formatOutput = true;
+		$authentication_xml = $dom->saveXml();
+
+		$dom = new \DomDocument();
+		$dom->preserveWhiteSpace = false;
+		$dom->loadXML($xml);
+		$dom->formatOutput = true;
+		$xml = $dom->saveXml();
+
+		$xml = $authentication_xml . "\n\n" . $xml . "\n";
+
+		$log  = '----------------------------------------------------------------' . "\n";
+		$log .= 'New request to: ' . $url . "\n";
 		$log .= 'Date: ' . date('Y-m-d H:i:s') . "\n";
 		$log .= 'Sending XML: ' . "\n";
 		$log .= $xml . "\n";
@@ -55,7 +73,13 @@ class Client {
 			throw new \Exception('Error ' . curl_errno($ch) . ': ' . curl_error($ch));
 		}
 
-		$log .= 'Response: ' . $result . "\n\n\n";
+		$dom = new \DomDocument();
+		$dom->preserveWhiteSpace = false;
+		$dom->loadXML($result);
+		$dom->formatOutput = true;
+		$result = $dom->saveXml();
+
+		$log .= 'Response: ' . "\n" . $result . "\n\n\n";
 
 		if (Config::$logfile !== null) {
 			file_put_contents(Config::$logfile, $log, FILE_APPEND);
