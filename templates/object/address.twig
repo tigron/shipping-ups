@@ -7,7 +7,7 @@
 {% if address.line3 != '' %}
 	<AddressLine3>{{ address.line3|truncate(35, false, '') }}</AddressLine3>
 {% endif %}
-<City>{{ address.city|truncate(30, false, '') }}</City>
+<City>{{ address.city|raw|truncate(30, false, '') }}</City>
 {% if address.country == 'US' %}
 	<StateProvinceCode>{{ address.get_us_state() }}</StateProvinceCode>
 {% endif %}

@@ -37,6 +37,10 @@
 			{{ recipient.render()|raw }}
 		</ShipTo>
 
+		<SoldTo>
+			{{ recipient.render()|raw }}
+		</SoldTo>
+
 		<ShipFrom>
 			{{ ship_from.render()|raw }}
 		</ShipFrom>
@@ -57,7 +61,7 @@
 		<ShipmentServiceOptions>
 			{% for notification in notifications %}
 				<Notification>
-				{{ notification.render()|raw }}
+					{{ notification.render()|raw }}
 				</Notification>
 			{% endfor %}
 		</ShipmentServiceOptions>
