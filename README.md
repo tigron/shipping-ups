@@ -113,7 +113,16 @@ PHP library to allow shipping via UPS
 	 * Ship
 	 */
 	$shipping = new \Tigron\Ups\Shipping();
-	$result = $shipping->confirm($shipper, $recipient, [ $package ], $service, $ship_from, $notification );
+
+	$shipping->set_shipper($shipper);
+	$shipping->set_ship_from($ship_from);
+	$shipping->set_recipient($recipient);
+	$shipping->add_package($package1);
+	$shipping->add_package($package2);
+	$shipping->set_service($service);
+	$shipping->add_notification($notification);
+
+	$result = $shipping->confirm();
 	$accept_result = $shipping->accept($result['ShipmentDigest']);
 
 	/**
