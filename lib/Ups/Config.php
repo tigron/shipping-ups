@@ -57,4 +57,12 @@ class Config {
 	 */
 	public static $logfile = null;
 
+	/**
+	 * Socket timeout
+	 *
+	 * @access public
+	 * @var int $socket_timeout
+	 */
+	public static $socket_timeout = 5;
+
 }

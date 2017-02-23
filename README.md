@@ -11,6 +11,7 @@ PHP library to allow shipping via UPS
 	\Tigron\Ups\Config::$password = 'password';
 	\Tigron\Ups\Config::$logfile = 'path to log file';
 	\Tigron\Ups\Config::$mode = 'test/prod';
+	\Tigron\Ups\Config::$socket_timeout = 5; // Default = 5
 
 	/**
 	 * Define the shipper
