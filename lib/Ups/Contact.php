@@ -99,7 +99,7 @@ class Contact {
 			$errors['lastname'] = true;
 		}
 
-		if (trim($this->email) != '' AND strlen($this->email) > 35) {
+		if (trim($this->email) != '' AND strlen($this->email) > 50) {
 			$errors['email'] = true;
 		}
 
@@ -124,7 +124,7 @@ class Contact {
 	public function render() {
 		$template = Template::get();
 		$template->assign('contact', $this);
-		return $template->render('object/contact.twig');
+		return $template->render('object/contact/contact.twig');
 	}
 
 	/**
@@ -139,6 +139,21 @@ class Contact {
 	public function render_shipper() {
 		$template = Template::get();
 		$template->assign('contact', $this);
-		return $template->render('object/shipper.twig');
+		return $template->render('object/contact/shipper.twig');
+	}
+
+	/**
+	 * Render soldto
+	 *
+	 * For some other reason, UPS uses yet another XML schema for a 'soldTo'
+	 * The data is identical but field names are different
+	 *
+	 * @access public
+	 * @return string $xml
+	 */
+	public function render_soldto() {
+		$template = Template::get();
+		$template->assign('contact', $this);
+		return $template->render('object/contact/soldto.twig');
 	}
 }

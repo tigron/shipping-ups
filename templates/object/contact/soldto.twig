@@ -1,0 +1,24 @@
+<Name>{{ contact.company|truncate(35, false, '') }}</Name>
+<AttentionName>{{ (contact.firstname ~ ' ' ~ contact.lastname)|truncate(35, false, '') }}</AttentionName>
+<Phone>
+	<Number>{{ contact.phone }}</Number>
+</Phone>
+<TaxIdentificationNumber>{{ contact.vat }}</TaxIdentificationNumber>
+<Address>
+	{% if contact.address.line1 != '' %}
+		<AddressLine>{{ contact.address.line1|truncate(35, false, '') }}</AddressLine>
+	{% endif %}
+	{% if contact.address.line != '' %}
+		<AddressLine>{{ contact.address.line2|truncate(35, false, '') }}</AddressLine>
+	{% endif %}
+	{% if contact.address.line != '' %}
+		<AddressLine>{{ contact.address.line3|truncate(35, false, '') }}</AddressLine>
+	{% endif %}
+
+	<City>{{ contact.address.city }}</City>
+	{% if contact.address.country == 'US' %}
+		<StateProvinceCode>{{ contact.address.get_us_state() }}</StateProvinceCode>
+	{% endif %}
+	<PostalCode>{{ contact.address.zipcode }}</PostalCode>
+	<CountryCode>{{ contact.address.country }}</CountryCode>
+</Address>

@@ -64,6 +64,9 @@
 					{{ notification.render()|raw }}
 				</Notification>
 			{% endfor %}
+			{% if internationalforms is defined %}
+				{{ internationalforms.render()|raw }}
+			{% endif %}
 		</ShipmentServiceOptions>
 
 		{% for package in packages %}

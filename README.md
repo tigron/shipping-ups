@@ -111,6 +111,23 @@ PHP library to allow shipping via UPS
 	$notification->email_addresses = [ 'test@example.com' ];
 
 	/**
+	 * Optional: Send paperless invoice
+	 */
+	$internationalForms = new \Tigron\Ups\Internationalforms();
+	$internationalForms->type = '01';
+	$internationalForms->export_reason = 'SALE';
+	$internationalForms->add_soldto($this->get_ups_customer($shipment));
+
+	$product = new \Tigron\Ups\Product();
+	$product->description = 'This is my test product';
+	$product->quantity = 5;
+	$product->measurement_code = 'PC';
+	$product->origin_country = 'BE';
+	$product->value = 100;
+
+	$internationalForms->add_product($product);
+
+	/**
 	 * Ship
 	 */
 	$shipping = new \Tigron\Ups\Shipping();

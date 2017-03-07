@@ -59,6 +59,14 @@ class Shipping extends Client {
 	private $service = null;
 
 	/**
+	 * Internationalforms
+	 *
+	 * @var \Tigron\Ups\Internationalforms $internationalforms
+	 * @access private
+	 */
+	private $internationalforms = null;
+
+	/**
 	 * Set shipper
 	 *
 	 * @access public
@@ -119,6 +127,16 @@ class Shipping extends Client {
 	}
 
 	/**
+	 * Set internationalForms
+	 *
+	 * @access public
+	 * @param \Tigron\Ups\InternationForms $internationforms
+	 */
+	public function set_internationalforms(\Tigron\Ups\Internationalforms $internationalforms) {
+		$this->internationalforms = $internationalforms;
+	}
+
+	/**
 	 * Validate an Address to UPS AddressValidation API
 	 *
 	 * @access public
@@ -158,6 +176,7 @@ class Shipping extends Client {
 		$template->assign('packages', $this->packages);
 		$template->assign('service', $this->service);
 		$template->assign('notifications', $this->notifications);
+		$template->assign('internationalforms', $this->internationalforms);
 
 		$xml = $template->render('call/ShipConfirm.twig');
 
