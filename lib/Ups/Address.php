@@ -53,6 +53,14 @@ class Address {
 	public $city = '';
 
 	/**
+	 * State
+	 *
+	 * @var string $state
+	 * @access public
+	 */
+	public $state = '';
+
+	/**
 	 * Country (iso-2)
 	 *
 	 * @var string $country

@@ -64,6 +64,7 @@ PHP library to allow shipping via UPS
 	$address->line3 = 'additional line';
 	$address->zipcode = '12345';
 	$address->city = 'City';
+	$address->state = 'NY' // Required for US/Canada/Ireland
 	$address->country = 'BE'; 	// ISO2 country code
 
 	$recipient = new \Tigron\Ups\Contact();
