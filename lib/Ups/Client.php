@@ -69,8 +69,18 @@ class Client {
 
 		//execute post
 		$result = curl_exec($ch);
+
 		if ($result === false) {
 			throw new \Exception('Error ' . curl_errno($ch) . ': ' . curl_error($ch));
+		}
+
+		@$res = simplexml_load_string($result);
+		if ($res === false) {
+			$log .= 'Response: ' . "\n" . $result . "\n\n\n";
+			if (Config::$logfile !== null) {
+				file_put_contents(Config::$logfile, $log, FILE_APPEND);
+			}
+			throw new \Exception('XML data returned by UPS is not syntaxically correct');
 		}
 
 		$dom = new \DomDocument();
@@ -80,7 +90,6 @@ class Client {
 		$result = $dom->saveXml();
 
 		$log .= 'Response: ' . "\n" . $result . "\n\n\n";
-
 		if (Config::$logfile !== null) {
 			file_put_contents(Config::$logfile, $log, FILE_APPEND);
 		}
