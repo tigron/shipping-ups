@@ -7,6 +7,7 @@ PHP library to allow shipping via UPS
 	 * Initialize the UPS package
 	 */
 	\Tigron\Ups\Config::$license_number = 'ups_license_number';
+	\Tigron\Ups\Config::$account_number = 'account_number';
 	\Tigron\Ups\Config::$user_id = 'user_id';
 	\Tigron\Ups\Config::$password = 'password';
 	\Tigron\Ups\Config::$logfile = 'path to log file';

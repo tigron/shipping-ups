@@ -1,10 +1,11 @@
 <?php
 /**
  * Config class
- * Configuration for Skeleton\File
+ * Configuration for Tigron\Ups
  *
  * @author Christophe Gosiau <christophe@tigron.be>
  * @author Gerry Demaret <gerry@tigron.be>
+ * @author David Vandemaele <david@tigron.be>
  */
 
 namespace Tigron\Ups;
@@ -20,6 +21,16 @@ class Config {
 	 * @var string $license_number
 	 */
 	public static $license_number = null;
+
+	/**
+	 * Account number
+	 *
+	 * The account number
+	 *
+	 * @access public
+	 * @var string $account_number
+	 */
+	public static $account_number = null;
 
 	/**
 	 * User id

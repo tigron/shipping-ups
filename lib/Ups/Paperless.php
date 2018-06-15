@@ -98,7 +98,7 @@ class Paperless {
 					'CustomerContext' => 'test',
 				]
 			],
-			'ShipperNumber' => \Tigron\Ups\Config::$user_id,
+			'ShipperNumber' => \Tigron\Ups\Config::$account_number,
 			'UserCreatedForm' => [
 				'UserCreatedFormFileName' => $file->name,
 				'UserCreatedFormFile' => $file->get_contents(),
