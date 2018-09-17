@@ -99,9 +99,10 @@ class Address {
 			throw new \Exception('Cannot get state for country other than US');
 		}
 
+		$zipcode = str_replace(' ', '', $this->zipcode);
 		include dirname(__FILE__) . '/../../assets/city_canada.php';
 		foreach ($canada_city as $city) {
-			if (strpos($city['zip'], $this->zipcode) === 0) {
+			if (strpos($city['zip'], $zipcode) === 0) {
 				return $city['state'];
 			}
 		}
