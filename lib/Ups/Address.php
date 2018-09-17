@@ -96,7 +96,7 @@ class Address {
 	 */
 	public function get_canada_state() {
 		if ($this->country != 'CA') {
-			throw new \Exception('Cannot get state for country other than US');
+			throw new \Exception('Cannot get state for country other than Canada');
 		}
 
 		$zipcode = str_replace(' ', '', $this->zipcode);
@@ -104,6 +104,26 @@ class Address {
 		foreach ($canada_city as $city) {
 			if (strpos($city['zip'], $zipcode) === 0) {
 				return $city['state'];
+			}
+		}
+		throw new \Exception('No state found for city with zipcode ' . $this->zipcode);
+	}
+
+	/**
+	 * Get Ireland_State
+	 *
+	 * @access public
+	 * @return string $state
+	 */
+	public function get_ireland_state() {
+		if ($this->country != 'IE') {
+			throw new \Exception('Cannot get state for country other than Ireland');
+		}
+
+		include dirname(__FILE__) . '/../../assets/city_ireland.php';
+		foreach ($ireland_city as $city) {
+			if ($city['zip'] == $this->zipcode) {
+				return $city['county_code'];
 			}
 		}
 		throw new \Exception('No state found for city with zipcode ' . $this->zipcode);

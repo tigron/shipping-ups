@@ -14,6 +14,8 @@
 	<StateProvinceCode>{{ address.get_us_state() }}</StateProvinceCode>
 {% elseif address.country == 'CA' %}
 	<StateProvinceCode>{{ address.get_canada_state() }}</StateProvinceCode>
+{% elseif address.country == 'IE' %}
+	<StateProvinceCode>{{ address.get_ireland_state() }}</StateProvinceCode>
 {% endif %}
 <PostalCode>{{ address.zipcode }}</PostalCode>
 <CountryCode>{{ address.country }}</CountryCode>
