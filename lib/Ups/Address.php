@@ -89,6 +89,26 @@ class Address {
 	}
 
 	/**
+	 * Get Canada_State
+	 *
+	 * @access public
+	 * @return string $state
+	 */
+	public function get_canada_state() {
+		if ($this->country != 'CA') {
+			throw new \Exception('Cannot get state for country other than US');
+		}
+
+		include dirname(__FILE__) . '/../../assets/city_canada.php';
+		foreach ($canada_city as $city) {
+			if (strpos($city['zip'], $this->zipcode) === 0) {
+				return $city['state'];
+			}
+		}
+		throw new \Exception('No state found for city with zipcode ' . $this->zipcode);
+	}
+
+	/**
 	 * Validate
 	 *
 	 * @access public

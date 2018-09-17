@@ -18,6 +18,8 @@
 	<City>{{ contact.address.city }}</City>
 	{% if contact.address.country == 'US' %}
 		<StateProvinceCode>{{ contact.address.get_us_state() }}</StateProvinceCode>
+	{% elseif contact.address.country == 'CA' %}
+		<StateProvinceCode>{{ contact.address.get_canada_state() }}</StateProvinceCode>
 	{% endif %}
 	<PostalCode>{{ contact.address.zipcode }}</PostalCode>
 	<CountryCode>{{ contact.address.country }}</CountryCode>
