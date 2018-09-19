@@ -80,12 +80,11 @@ class Address {
 		}
 
 		include dirname(__FILE__) . '/../../assets/city_us.php';
-		foreach ($us_city as $city) {
-			if ($city['zip'] == $this->zipcode) {
-				return $city['state'];
-			}
+		if (isset($us_zip_state[$this->zipcode])) {
+			return $us_zip_state[$this->zipcode];
+		} else {
+			throw new \Exception('No state found for city with zipcode ' . $this->zipcode);
 		}
-		throw new \Exception('No state found for city with zipcode ' . $this->zipcode);
 	}
 
 	/**
@@ -101,32 +100,11 @@ class Address {
 
 		$zipcode = str_replace(' ', '', $this->zipcode);
 		include dirname(__FILE__) . '/../../assets/city_canada.php';
-		foreach ($canada_city as $city) {
-			if (strpos($city['zip'], $zipcode) === 0) {
-				return $city['state'];
-			}
+		if (isset($canada_zip_state[$this->zipcode])) {
+			return $canada_zip_state[$this->zipcode];
+		} else {
+			throw new \Exception('No state found for city with zipcode ' . $this->zipcode);
 		}
-		throw new \Exception('No state found for city with zipcode ' . $this->zipcode);
-	}
-
-	/**
-	 * Get Ireland_State
-	 *
-	 * @access public
-	 * @return string $state
-	 */
-	public function get_ireland_state() {
-		if ($this->country != 'IE') {
-			throw new \Exception('Cannot get state for country other than Ireland');
-		}
-
-		include dirname(__FILE__) . '/../../assets/city_ireland.php';
-		foreach ($ireland_city as $city) {
-			if ($city['zip'] == $this->zipcode) {
-				return $city['county_code'];
-			}
-		}
-		throw new \Exception('No state found for city with zipcode ' . $this->zipcode);
 	}
 
 	/**
