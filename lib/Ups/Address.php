@@ -79,11 +79,13 @@ class Address {
 			throw new \Exception('Cannot get state for country other than US');
 		}
 
+		$zipcode = str_replace(' ', '', $this->zipcode);
+		$zipcode = strtoupper($zipcode);
 		include dirname(__FILE__) . '/../../assets/city_us.php';
-		if (isset($us_zip_state[$this->zipcode])) {
-			return $us_zip_state[$this->zipcode];
+		if (isset($us_zip_state[$zipcode])) {
+			return $us_zip_state[$zipcode];
 		} else {
-			throw new \Exception('No state found for city with zipcode ' . $this->zipcode);
+			throw new \Exception('No state found for US city with zipcode ' . print_r($us_zip_state));
 		}
 	}
 
@@ -99,11 +101,12 @@ class Address {
 		}
 
 		$zipcode = str_replace(' ', '', $this->zipcode);
+		$zipcode = strtoupper($zipcode);
 		include dirname(__FILE__) . '/../../assets/city_canada.php';
-		if (isset($canada_zip_state[$this->zipcode])) {
-			return $canada_zip_state[$this->zipcode];
+		if (isset($canada_zip_state[$zipcode])) {
+			return $canada_zip_state[$zipcode];
 		} else {
-			throw new \Exception('No state found for city with zipcode ' . $this->zipcode);
+			throw new \Exception('No state found for city with zipcode ' . $zipcode);
 		}
 	}
 
