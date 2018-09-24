@@ -8,8 +8,8 @@
 	<AddressLine3>{{ address.line3|truncate(35, false, '') }}</AddressLine3>
 {% endif %}
 <City>{{ address.city|raw|truncate(30, false, '') }}</City>
-{% if address.state != '' %}
-	<StateProvinceCode>{{ address.state|truncate(5, false, '') }}</StateProvinceCode>
+{% if address.state_code != '' %}
+	<StateProvinceCode>{{ address.state_code }}</StateProvinceCode>
 {% elseif address.country == 'US' %}
 	<StateProvinceCode>{{ address.get_us_state() }}</StateProvinceCode>
 {% elseif address.country == 'CA' %}
