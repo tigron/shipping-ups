@@ -121,9 +121,12 @@ class Contact {
 	 * @access public
 	 * @return string $xml
 	 */
-	public function render() {
+	public function render($format = null) {
 		$template = Template::get();
 		$template->assign('contact', $this);
+		if ($format != null) {
+			$template->assign('format', $format);
+		}
 		return $template->render('object/contact/contact.twig');
 	}
 

@@ -153,7 +153,7 @@ class Address {
 	 * @access public
 	 * @return string $xml
 	 */
-	public function render() {
+	public function render($format = null) {
 		/**
 		 * UPS Exceptions
 		 */
@@ -174,6 +174,9 @@ class Address {
 		}
 		$template = Template::get();
 		$template->assign('address', $this);
+		if ($format != null) {
+			$template->assign('format', $format);
+		}
 		return $template->render('object/address.twig');
 	}
 }
