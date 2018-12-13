@@ -59,7 +59,7 @@ PHP library to allow shipping via UPS
 	/**
 	 * Define the Recipient
 	 */
-    $address = new \Tigron\Ups\Address();
+	$address = new \Tigron\Ups\Address();
 	$address->line1 = 'street 1';
 	$address->line2 = 'additional line';
 	$address->line3 = 'additional line';
@@ -136,7 +136,8 @@ PHP library to allow shipping via UPS
 
 	$shipping->set_shipper($shipper);
 	$shipping->set_ship_from($ship_from);
-	$shipping->set_recipient($recipient);
+	$shipping->set_ship_to($recipient);
+	$shipping->set_sold_to($recipient);
 	$shipping->add_package($package1);
 	$shipping->add_package($package2);
 	$shipping->set_service($service);
