@@ -16,4 +16,5 @@
 	<StateProvinceCode>{{ address.get_canada_state() }}</StateProvinceCode>
 {% endif %}
 <PostalCode>{{ address.zipcode }}</PostalCode>
-<CountryCode>{% if format == 'soldTo' and address.country == 'IC' %}ES{% else %}{{ address.country }}{% endif %}</CountryCode>
+<CountryCode>{{ address.country }}</CountryCode>
+<Mode>{{ address.mode }}</Mode>

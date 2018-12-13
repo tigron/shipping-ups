@@ -27,12 +27,20 @@ class Shipping extends Client {
 	private $ship_from = null;
 
 	/**
-	 * Recipient
+	 * Ship To
 	 *
-	 * @var \Tigron\Ups\Contact $recipient
+	 * @var \Tigron\Ups\Contact $ship_to
 	 * @access private
 	 */
-	private $recipient = null;
+	private $ship_to = null;
+
+	/**
+	 * Sold To
+	 *
+	 * @var \Tigron\Ups\Contact $sold_to
+	 * @access private
+	 */
+	private $sold_to = null;
 
 	/**
 	 * Package
@@ -77,13 +85,34 @@ class Shipping extends Client {
 	}
 
 	/**
-	 * Set recipient
+	 * Set recipient (deprecated)
 	 *
 	 * @access public
 	 * @param \Tigron\Ups\Contact $recipient
 	 */
 	public function set_recipient(\Tigron\Ups\Contact $recipient) {
-		$this->recipient = $recipient;
+		$this->set_ship_to($recipient);
+		$this->set_sold_to($recipient);
+	}
+
+	/**
+	 * Set sold_to
+	 *
+	 * @access public
+	 * @param \Tigron\Ups\Contact $recipient
+	 */
+	public function set_sold_to(\Tigron\Ups\Contact $recipient) {
+		$this->sold_to = $recipient;
+	}
+
+	/**
+	 * Set ship_to
+	 *
+	 * @access public
+	 * @param \Tigron\Ups\Contact $recipient
+	 */
+	public function set_ship_to(\Tigron\Ups\Contact $recipient) {
+		$this->ship_to = $recipient;
 	}
 
 	/**
@@ -156,8 +185,12 @@ class Shipping extends Client {
 			throw new \Exception('Ship_From is not set, use "set_ship_from()" to define one');
 		}
 
-		if (!isset($this->recipient)) {
-			throw new \Exception('Recipient is not set, use "set_recipient()" to define one');
+		if (!isset($this->ship_to)) {
+			throw new \Exception('Recipient ship_to is not set, use "set_ship_to()" to define one');
+		}
+
+		if (!isset($this->sold_to)) {
+			throw new \Exception('Recipient sold_to is not set, use "set_sold_to()" to define one');
 		}
 
 		if (count($this->packages) == 0) {
@@ -172,7 +205,8 @@ class Shipping extends Client {
 		$template = Template::get();
 		$template->assign('shipper', $this->shipper);
 		$template->assign('ship_from', $this->ship_from);
-		$template->assign('recipient', $this->recipient);
+		$template->assign('sold_to', $this->sold_to);
+		$template->assign('ship_to', $this->ship_to);
 		$template->assign('packages', $this->packages);
 		$template->assign('service', $this->service);
 		$template->assign('notifications', $this->notifications);

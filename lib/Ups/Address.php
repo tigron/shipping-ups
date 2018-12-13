@@ -69,6 +69,14 @@ class Address {
 	public $country = '';
 
 	/**
+	 * Address rendering mode
+	 *
+	 * @var string $mode
+	 * @access public
+	 */
+	public $mode = '';
+
+	/**
 	 * Get US_State
 	 *
 	 * @access public
@@ -153,7 +161,7 @@ class Address {
 	 * @access public
 	 * @return string $xml
 	 */
-	public function render($format = null) {
+	public function render() {
 		/**
 		 * UPS Exceptions
 		 */
@@ -172,11 +180,9 @@ class Address {
 				$this->country = 'DE';
 			}
 		}
+
 		$template = Template::get();
 		$template->assign('address', $this);
-		if ($format != null) {
-			$template->assign('format', $format);
-		}
 		return $template->render('object/address.twig');
 	}
 }
