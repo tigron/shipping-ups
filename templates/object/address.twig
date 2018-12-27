@@ -15,7 +15,8 @@
 {% elseif address.country == 'CA' %}
 	<StateProvinceCode>{{ address.get_canada_state() }}</StateProvinceCode>
 {% elseif address.country == 'IE' %}
-	<StateProvinceCode>{{ address.zipcode|slice(0, 3) }}</StateProvinceCode>{% endif %}
+	<StateProvinceCode>{{ address.zipcode|slice(0, 3) }}</StateProvinceCode>
+{% endif %}
 <PostalCode>{{ address.zipcode }}</PostalCode>
 <CountryCode>{{ address.country }}</CountryCode>
 <Mode>{{ address.mode }}</Mode>
