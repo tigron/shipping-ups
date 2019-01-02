@@ -123,6 +123,11 @@ class Contact {
 	 */
 	public function render() {
 		$template = Template::get();
+
+		$this->company   = Util::replace_unsupported_characters($this->company);
+		$this->firstname = Util::replace_unsupported_characters($this->firstname);
+		$this->lastname  = Util::replace_unsupported_characters($this->lastname);
+
 		$template->assign('contact', $this);
 		return $template->render('object/contact/contact.twig');
 	}

@@ -181,6 +181,11 @@ class Address {
 			}
 		}
 
+		$this->line1 = Util::replace_unsupported_characters($this->line1);
+		$this->line2 = Util::replace_unsupported_characters($this->line2);
+		$this->line3 = Util::replace_unsupported_characters($this->line3);
+		$this->city  = Util::replace_unsupported_characters($this->city);
+
 		$template = Template::get();
 		$template->assign('address', $this);
 		return $template->render('object/address.twig');
