@@ -89,11 +89,12 @@ class Address {
 
 		$zipcode = str_replace(' ', '', $this->zipcode);
 		$zipcode = strtoupper($zipcode);
+		$zipcode = intval($zipcode);
 		include dirname(__FILE__) . '/../../assets/city_us.php';
 		if (isset($us_zip_state[$zipcode])) {
 			return $us_zip_state[$zipcode];
 		} else {
-			throw new \Exception('No state found for US city with zipcode ' . print_r($us_zip_state));
+			throw new \Exception('No state found for US city with zipcode ' . $zipcode);
 		}
 	}
 
