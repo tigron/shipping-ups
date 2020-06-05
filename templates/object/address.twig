@@ -1,13 +1,13 @@
 {% if address.line1 != '' %}
-	<AddressLine1>{{ address.line1|truncate(35, false, '') }}</AddressLine1>
+	<AddressLine1>{{ address.line1|u.truncate(35, false, '') }}</AddressLine1>
 {% endif %}
 {% if address.line2 != '' %}
-	<AddressLine2>{{ address.line2|truncate(35, false, '') }}</AddressLine2>
+	<AddressLine2>{{ address.line2|u.truncate(35, false, '') }}</AddressLine2>
 {% endif %}
 {% if address.line3 != '' %}
-	<AddressLine3>{{ address.line3|truncate(35, false, '') }}</AddressLine3>
+	<AddressLine3>{{ address.line3|u.truncate(35, false, '') }}</AddressLine3>
 {% endif %}
-<City>{{ address.city|raw|truncate(30, false, '') }}</City>
+<City>{{ address.city|raw|u.truncate(30, false, '') }}</City>
 {% if address.state_code != '' %}
 	<StateProvinceCode>{{ address.state_code }}</StateProvinceCode>
 {% elseif address.country == 'US' %}

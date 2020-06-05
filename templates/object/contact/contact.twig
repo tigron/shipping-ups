@@ -1,12 +1,12 @@
 {% if contact.company == '' %}
-	<CompanyName>{{ (contact.firstname ~ ' ' ~ contact.lastname)|truncate(35, false, '') }}</CompanyName>
+	<CompanyName>{{ (contact.firstname ~ ' ' ~ contact.lastname)|u.truncate(35, false, '') }}</CompanyName>
 {% else %}
-	<CompanyName>{{ contact.company|truncate(35, false, '') }}</CompanyName>
+	<CompanyName>{{ contact.company|u.truncate(35, false, '') }}</CompanyName>
 {% endif %}
-<AttentionName>{{ (contact.firstname ~ ' ' ~ contact.lastname)|truncate(35, false, '') }}</AttentionName>
+<AttentionName>{{ (contact.firstname ~ ' ' ~ contact.lastname)|u.truncate(35, false, '') }}</AttentionName>
 <PhoneNumber>{{ contact.phone }}</PhoneNumber>
 {% if contact.email != '' %}
-	<EmailAddress>{{ contact.email|truncate(50, false, '') }}</EmailAddress>
+	<EmailAddress>{{ contact.email|u.truncate(50, false, '') }}</EmailAddress>
 {% endif %}
 <Address>
 	{{ contact.address.render()|raw }}

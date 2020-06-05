@@ -1,5 +1,5 @@
-<Name>{{ contact.company|truncate(35, false, '') }}</Name>
-<AttentionName>{{ (contact.firstname ~ ' ' ~ contact.lastname)|truncate(35, false, '') }}</AttentionName>
+<Name>{{ contact.company|u.truncate(35, false, '') }}</Name>
+<AttentionName>{{ (contact.firstname ~ ' ' ~ contact.lastname)|u.truncate(35, false, '') }}</AttentionName>
 <PhoneNumber>{{ contact.phone }}</PhoneNumber>
 <ShipperNumber>{{ account_number }}</ShipperNumber>
 <TaxIdentificationNumber>{{ contact.vat }}</TaxIdentificationNumber>
