@@ -112,6 +112,15 @@ class Shipping extends Client {
 	 * @param \Tigron\Ups\Contact $recipient
 	 */
 	public function set_ship_to(\Tigron\Ups\Contact $recipient) {
+		/**
+		 * UPS Exceptions
+		 */
+		if ($recipient->address->country == 'ES') {
+			$zipcodes = [ 52001, 52002, 52003, 52004, 52005, 52006, 52070, 52071, 52080 ]; // source: https://worldpostalcode.com/spain/melilla
+			if (in_array($recipient->address->zipcode, $zipcodes)) {
+				$recipient->address->country = 'XL'; // Melilla is part of Spain but located in northwest coast of Africa, sharing a border with Morocco
+			}
+		}
 		$this->ship_to = $recipient;
 	}
 
