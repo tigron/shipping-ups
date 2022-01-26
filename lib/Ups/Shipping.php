@@ -102,6 +102,11 @@ class Shipping extends Client {
 	 * @param \Tigron\Ups\Contact $recipient
 	 */
 	public function set_sold_to(\Tigron\Ups\Contact $recipient) {
+		// <ErrorDescription>The Sold To party's country code must be the same as the Ship To party's country code with the exception of Canada and satellite countries.</ErrorDescription>
+		// AX - Aland Islands  is consider a satellite country belonging to Finland, From the invoice details point of view the Sold to Country is Finland not Aland Islands.
+		if ($recipient->address->country == 'AX') {
+			$recipient->address->country = 'FI';
+		}
 		$this->sold_to = $recipient;
 	}
 
