@@ -144,6 +144,7 @@ class Contact {
 	public function render_shipper() {
 		$template = Template::get();
 		$template->assign('contact', $this);
+		$template->assign('user_id', Config::$user_id);
 		return $template->render('object/contact/shipper.twig');
 	}
 

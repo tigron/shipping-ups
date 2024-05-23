@@ -20,8 +20,8 @@ class Track extends Client {
 	public function track($tracking_number) {
 		$template = Template::get();
 		$template->assign('tracking_number', $tracking_number);
-		$xml = $template->render('call/track.twig');
-		$result = $this->call('Track', $xml);
+		$json = $template->render('call/track.twig');
+		$result = $this->call('track', 'details/' . $tracking_number, '{}', 'GET', [],'v1');
 		return $result;
 	}
 

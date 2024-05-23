@@ -1,8 +1,5 @@
-<Name>{{ contact.company|u.truncate(35, false, '') }}</Name>
-<AttentionName>{{ (contact.firstname ~ ' ' ~ contact.lastname)|u.truncate(35, false, '') }}</AttentionName>
-<PhoneNumber>{{ contact.phone }}</PhoneNumber>
-<ShipperNumber>{{ account_number }}</ShipperNumber>
-<TaxIdentificationNumber>{{ contact.vat }}</TaxIdentificationNumber>
-<Address>
-	{{ contact.address.render()|raw }}
-</Address>
+      "Name": "{{ contact.company|u.truncate(35, false, '') }}",
+      "ShipperNumber": "{{ user_id }}",
+      "Address": {
+{{ contact.address.render()|raw }}
+      }

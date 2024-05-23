@@ -1,18 +1,21 @@
-<PackagingType>
-	<Code>{{ package.type.code }}</Code>
-	<Description>{{ package.type.name }}</Description>
-</PackagingType>
+        "PackagingType": {
+          "Code": "{{ package.type.code }}",
+          "Description": "{{ package.type.name }}"
+        },
+        "Dimensions": {
+          "UnitOfMeasurement": {
+            "Code": "CM",
+            "Description": "Centimeters"
+          },
+          "Length": "5",
+          "Width": "5",
+          "Height": "5"
+        },
+        "PackageWeight": {
+          "UnitOfMeasurement": {
+            "Code": "KGS",
+            "Description": "Kilograms"
+          },
+          "Weight": "{{ package.weight }}"
+        }
 
-<Description>{{ package.description }}</Description>
-
-<PackageWeight>
-	<UnitOfMeasurement/>
-	<Weight>{{ package.weight }}</Weight>
-</PackageWeight>
-
-{% if package.large %}
-	<LargePackageIndicator/>
-{% endif %}
-{% if package.additional_handling %}
-	<AdditionalHandling />
-{% endif %}

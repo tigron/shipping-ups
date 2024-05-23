@@ -53,6 +53,36 @@ class Config {
 	public static $password = null;
 
 	/**
+	 * Client ID
+	 *
+	 * The client_id for ups.com
+	 *
+	 * @access public
+	 * @var string $client_id
+	 */
+	public static $client_id = null;
+
+	/**
+	 * Secret Key
+	 *
+	 * The secrect_key for ups.com
+	 *
+	 * @access public
+	 * @var string $secrect_key
+	 */
+	public static $secrect_key = null;
+
+	/**
+	 * API Version
+	 *
+	 * The api_version for ups.com
+	 *
+	 * @access public
+	 * @var string $api_version
+	 */
+	public static $api_version = null;
+
+	/**
 	 * Test/production
 	 *
 	 * @access public

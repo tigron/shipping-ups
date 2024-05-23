@@ -1,22 +1,23 @@
+        "AddressLine": [
 {% if address.line1 != '' %}
-	<AddressLine1>{{ address.line1|u.truncate(35, false, '') }}</AddressLine1>
+          "{{ address.line1|u.truncate(35, false, '') }}"
 {% endif %}
 {% if address.line2 != '' %}
-	<AddressLine2>{{ address.line2|u.truncate(35, false, '') }}</AddressLine2>
+          ,"{{ address.line2|u.truncate(35, false, '') }}"
 {% endif %}
 {% if address.line3 != '' %}
-	<AddressLine3>{{ address.line3|u.truncate(35, false, '') }}</AddressLine3>
+          ,"{{ address.line3|u.truncate(35, false, '') }}"
 {% endif %}
-<City>{{ address.city|raw|u.truncate(30, false, '') }}</City>
+        ],
+        "City": "{{ address.city|raw|u.truncate(30, false, '') }}",
 {% if address.state_code != '' %}
-	<StateProvinceCode>{{ address.state_code }}</StateProvinceCode>
+        "StateProvinceCode": "{{ address.state_code }}",
 {% elseif address.country == 'US' %}
-	<StateProvinceCode>{{ address.get_us_state() }}</StateProvinceCode>
+        "StateProvinceCode": "{{ address.get_us_state() }}",
 {% elseif address.country == 'CA' %}
-	<StateProvinceCode>{{ address.get_canada_state() }}</StateProvinceCode>
+        "StateProvinceCode": "{{ address.get_canada_state() }}",
 {% elseif address.country == 'IE' %}
-	<StateProvinceCode>{{ address.zipcode|slice(0, 3) }}</StateProvinceCode>
+        "StateProvinceCode": "{{ address.zipcode|slice(0, 3) }}",
 {% endif %}
-<PostalCode>{{ address.zipcode }}</PostalCode>
-<CountryCode>{{ address.country }}</CountryCode>
-<Mode>{{ address.mode }}</Mode>
+        "PostalCode": "{{ address.zipcode }}",
+        "CountryCode": "{{ address.country }}"

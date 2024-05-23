@@ -24,81 +24,153 @@ class Client {
 	 *
 	 * @access public
 	 * @param string $endpoint
-	 * @param string $xml
-	 * @return string $xml
+	 * @param string $request_option
+	 * @param string $payload
+	 * @param string $method
+	 * @param array $parameters
+	 * @param string $version
+	 * @return array
 	 */
-	public function call($endpoint, $xml) {
+	public function call(string $endpoint, string $request_option, string $payload, string $method = 'POST', array $parameters = [], string $version = null): array {
+
+		// test syntax of JSON
+		json_decode($payload);
+		if (json_last_error() > 0) {
+			if (Config::$logfile !== null) {
+				file_put_contents(Config::$logfile, "JSON parsing error: " . json_last_error_msg() . " (" . json_last_error() . ")", FILE_APPEND);
+				file_put_contents(Config::$logfile, $payload, FILE_APPEND);
+			}
+			throw new \Exception("JSON parsing error: " . json_last_error_msg() . " (" . json_last_error() . ")");
+		}
+
 		//open connection
 		$ch = curl_init();
 
+		if ($version === null) {
+			$version = Config::$api_version;
+		}
 		if (Config::$mode == 'test') {
-			$url = 'https://wwwcie.ups.com/ups.app/xml/' . $endpoint;
+			$url = 'https://wwwcie.ups.com/api/' . $endpoint . '/' . $version . '/' . $request_option;
 		} else {
-			$url = 'https://onlinetools.ups.com/ups.app/xml/' . $endpoint;
+			$url = 'https://onlinetools.ups.com/api/' . $endpoint . '/' . $version . '/' . $request_option;
+		}
+
+		if (count($parameters) > 0) {
+			$url .= "?" . http_build_query($parameters);
+		}
+
+		$config = \Skeleton\Core\Config::Get();
+
+		// checking if bearer toking is still valid or requesting one
+		try {
+			// searching for auth file containing a token
+			if (file_exists($config->tmp_dir . '/ups.json') === false) {
+				throw new \Exception('No auth file present');
+			}
+			$auth = file_get_contents($config->tmp_dir . '/ups.json');
+			$auth = json_decode($auth, true);
+			// if bearer token is expired or expires in less than 60 seconds we need to request a new on
+			if ($auth['expires_at'] - 60 < time()) {
+				throw new \Exception("New token needed");
+			}
+			$token = $auth['access_token'];
+		} catch (\Exception $e) {
+			// requesting a new token
+			$payload = "grant_type=client_credentials";
+
+			$authentication_url = 'https://onlinetools.ups.com/security/v1/oauth/token';
+			if (Config::$mode == 'test') {
+				$authentication_url = 'https://wwwcie.ups.com/security/v1/oauth/token';
+			}
+			curl_setopt_array($ch, [
+				CURLOPT_HTTPHEADER => [
+					"Content-Type: application/x-www-form-urlencoded",
+					"x-merchant-id: string",
+					"Authorization: Basic " . base64_encode(Config::$client_id . ':' . Config::$secrect_key),
+				],
+				CURLOPT_POSTFIELDS => $payload,
+				CURLOPT_URL => $authentication_url,
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_CUSTOMREQUEST => "POST",
+			]);
+
+			$response = curl_exec($ch);
+			$error = curl_error($ch);
+
+			curl_close($ch);
+
+			if ($error) {
+				throw new \Excpetion("cURL Error #:" . $error);
+			}
+			$response = json_decode($response, true);
+			$response['expires_at'] = (int)$response['issued_at'] + (int)$response['expires_in'];
+			// saving token and expiration tstamp to file
+			file_put_contents($config->tmp_dir . '/ups.json', json_encode($response));
+			$token = $response['access_token'];
 		}
 
 		$template = Template::get();
-		$authentication_xml = $template->render('authenticate.twig');
 
-		$dom = new \DomDocument();
-		$dom->preserveWhiteSpace = false;
-		$dom->loadXML($authentication_xml);
-		$dom->formatOutput = true;
-		$authentication_xml = $dom->saveXml();
-
-		$dom = new \DomDocument();
-		$dom->preserveWhiteSpace = false;
-		$dom->loadXML($xml);
-		$dom->formatOutput = true;
-		$xml = $dom->saveXml();
-
-		$xml = $authentication_xml . "\n\n" . $xml . "\n";
+		$headers = [
+			"Content-Type: application/x-www-form-urlencoded",
+			"Authorization: Bearer " . $token,
+			"transId: string",
+			"transactionSrc: testing",
+		];
 
 		$log  = '----------------------------------------------------------------' . "\n";
 		$log .= 'New request to: ' . $url . "\n";
 		$log .= 'Date: ' . date('Y-m-d H:i:s') . "\n";
-		$log .= 'Sending XML: ' . "\n";
-		$log .= $xml . "\n";
+		$log .= 'Headers: ' . print_r($headers, true);
+		$log .= 'Payload: ' . "\n";
+		$log .= $payload . "\n";
 
 		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, [ 'Content-Type: application/x-www-form-urlencoded; charset=utf-8' ]);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
 		curl_setopt($ch, CURLOPT_TIMEOUT, Config::$socket_timeout);
+		if ($method === 'POST' || $method === 'PUT' || $method === 'PATCH') {
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		}
 
 		//execute post
 		$result = curl_exec($ch);
+		$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		$log .= "Return code: HTTP/" . $httpcode . "\n";
 
-		if ($result === false) {
+		if (curl_errno($ch) > 0) {
 			throw new \Exception('Error ' . curl_errno($ch) . ': ' . curl_error($ch));
 		}
 
-		@$res = simplexml_load_string($result);
-		if ($res === false) {
+		if (empty($result)) {
+			$log .= 'Response: empty' . "\n\n\n";
+			if (Config::$logfile !== null) {
+				file_put_contents(Config::$logfile, $log, FILE_APPEND);
+			}
+			throw new \Exception('JSON returned by UPS is empty');
+		}
+
+		$res = json_decode($result, true);
+		if ($res === null) {
 			$log .= 'Response: ' . "\n" . $result . "\n\n\n";
 			if (Config::$logfile !== null) {
 				file_put_contents(Config::$logfile, $log, FILE_APPEND);
 			}
-			throw new \Exception('XML data returned by UPS is not syntaxically correct');
+			throw new \Exception('JSON returned by UPS is not syntaxically correct');
 		}
 
-		$dom = new \DomDocument();
-		$dom->preserveWhiteSpace = false;
-		$dom->loadXML($result);
-		$dom->formatOutput = true;
-		$result = $dom->saveXml();
-
-		$log .= 'Response: ' . "\n" . $result . "\n\n\n";
+		$log .= 'Response: ' . "\n" . print_r($res, true) . "\n\n\n";
 		if (Config::$logfile !== null) {
 			file_put_contents(Config::$logfile, $log, FILE_APPEND);
 		}
 
-		$result = $this->xml_to_array($result);
-		if ($result['Response']['ResponseStatusCode'] == 0) {
-			throw new \Exception('Error ' . $result['Response']['Error']['ErrorCode'] . ': ' . $result['Response']['Error']['ErrorDescription']);
+		if (isset($res['response']['errors'])) {
+			foreach ($res['response']['errors'] as $error) {
+				throw new \Exception('Error ' . $error['code'] . ': ' . $error['message']);
+			}
 		}
-		return $result;
+		return $res;
 	}
 
 	/**
