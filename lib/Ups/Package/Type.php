@@ -71,6 +71,19 @@ class Type {
 	}
 
 	/**
+	 * Get info
+	 *
+	 * @access public
+	 */
+	public function get_info() {
+		$info = [
+			'Code' => (string)$this->code,
+			'Description' => $this->name
+		];
+		return $info;
+	}
+
+	/**
 	 * Get by code
 	 *
 	 * @access public

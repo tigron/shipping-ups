@@ -1,4 +1,0 @@
-        "Name": "{{ (contact.firstname ~ ' ' ~ contact.lastname)|u.truncate(35, false, '') }}",
-        "Address": {
-{{ contact.address.render()|raw }}
-        }

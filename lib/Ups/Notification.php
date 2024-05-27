@@ -37,15 +37,18 @@ class Notification {
 	public $email_addresses = [];
 
 	/**
-	 * Render the object
+	 * Get info
 	 *
 	 * @access public
-	 * @return string $xml
+	 * @return array<string> $info
 	 */
-	public function render() {
-		$template = Template::get();
-		$template->assign('notification', $this);
-		return $template->render('object/notification.twig');
+	public function get_info() {
+		$info = [
+			'NotificationCode' => (string)$this->code,
+			'EMail' => [
+				'EMailAddress' => $this->email_addresses,
+			],
+		];
+		return $info;
 	}
-
 }

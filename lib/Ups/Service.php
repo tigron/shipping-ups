@@ -28,4 +28,17 @@ class Service {
 	 */
 	public $name = '';
 
+	/**
+	 * Get info
+	 *
+	 * @access public
+	 * @return array<string>
+	 */
+	public function get_info(): array {
+		$info = [
+			'Code' => (string)$this->code,
+			'Description' => $this->name
+		];
+		return $info;
+	}
 }

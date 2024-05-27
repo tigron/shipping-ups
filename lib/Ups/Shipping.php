@@ -80,7 +80,7 @@ class Shipping extends Client {
 	 * @access public
 	 * @param \Tigron\Ups\Contact $shipper
 	 */
-	public function set_shipper(\Tigron\Ups\Contact $shipper) {
+	public function set_shipper(\Tigron\Ups\Contact $shipper): void {
 		$this->shipper = $shipper;
 	}
 
@@ -90,9 +90,19 @@ class Shipping extends Client {
 	 * @access public
 	 * @param \Tigron\Ups\Contact $recipient
 	 */
-	public function set_recipient(\Tigron\Ups\Contact $recipient) {
+	public function set_recipient(\Tigron\Ups\Contact $recipient): void {
 		$this->set_ship_to($recipient);
 		$this->set_sold_to($recipient);
+	}
+
+	/**
+	 * Set ship_from
+	 *
+	 * @access public
+	 * @param \Tigron\Ups\Contact $ship_from
+	 */
+	public function set_ship_from(\Tigron\Ups\Contact $ship_from): void {
+		$this->ship_from = $ship_from;
 	}
 
 	/**
@@ -101,7 +111,7 @@ class Shipping extends Client {
 	 * @access public
 	 * @param \Tigron\Ups\Contact $recipient
 	 */
-	public function set_sold_to(\Tigron\Ups\Contact $recipient) {
+	public function set_sold_to(\Tigron\Ups\Contact $recipient): void {
 		// <ErrorDescription>The Sold To party's country code must be the same as the Ship To party's country code with the exception of Canada and satellite countries.</ErrorDescription>
 		// AX - Aland Islands  is consider a satellite country belonging to Finland, From the invoice details point of view the Sold to Country is Finland not Aland Islands.
 		if ($recipient->address->country == 'AX') {
@@ -116,16 +126,7 @@ class Shipping extends Client {
 	 * @access public
 	 * @param \Tigron\Ups\Contact $recipient
 	 */
-	public function set_ship_to(\Tigron\Ups\Contact $recipient) {
-		/**
-		 * UPS Exceptions
-		 */
-		if ($recipient->address->country == 'ES') {
-			$zipcodes = [ 52001, 52002, 52003, 52004, 52005, 52006, 52070, 52071, 52080 ]; // source: https://worldpostalcode.com/spain/melilla
-			if (in_array($recipient->address->zipcode, $zipcodes)) {
-				$recipient->address->country = 'XL'; // Melilla is part of Spain but located in northwest coast of Africa, sharing a border with Morocco
-			}
-		}
+	public function set_ship_to(\Tigron\Ups\Contact $recipient): void {
 		$this->ship_to = $recipient;
 	}
 
@@ -135,7 +136,7 @@ class Shipping extends Client {
 	 * @access public
 	 * @param \Tigron\Ups\Package $package
 	 */
-	public function add_package(\Tigron\Ups\Package $package) {
+	public function add_package(\Tigron\Ups\Package $package): void {
 		$this->packages[] = $package;
 	}
 
@@ -145,19 +146,10 @@ class Shipping extends Client {
 	 * @access public
 	 * @param \Tigron\Ups\Service $serice
 	 */
-	public function set_service(\Tigron\Ups\Service $service) {
+	public function set_service(\Tigron\Ups\Service $service): void {
 		$this->service = $service;
 	}
 
-	/**
-	 * Set ship_from
-	 *
-	 * @access public
-	 * @param \Tigron\Ups\Contact $ship_from
-	 */
-	public function set_ship_from(\Tigron\Ups\Contact $ship_from) {
-		$this->ship_from = $ship_from;
-	}
 
 	/**
 	 * Add notification
@@ -165,7 +157,7 @@ class Shipping extends Client {
 	 * @access public
 	 * @param \Tigron\Ups\Notification $notification
 	 */
-	public function add_notification(\Tigron\Ups\Notification $notification) {
+	public function add_notification(\Tigron\Ups\Notification $notification): void {
 		$this->notifications[] = $notification;
 	}
 
@@ -175,89 +167,80 @@ class Shipping extends Client {
 	 * @access public
 	 * @param \Tigron\Ups\InternationForms $internationforms
 	 */
-	public function set_internationalforms(\Tigron\Ups\Internationalforms $internationalforms) {
+	public function set_internationalforms(\Tigron\Ups\Internationalforms $internationalforms): void {
 		$this->internationalforms = $internationalforms;
 	}
 
 	/**
-	 * Validate an Address to UPS AddressValidation API
+	 * Get info
 	 *
 	 * @access public
-	 * @param \Tigron\Ups\Contact $shipper
-	 * @param \Tigron\Ups\Contact $recipient
-	 * @param array $packages
-	 * @param \Tigron\Ups\Service $service
+	 * @return array<string> $info
+	 */
+	public function get_info(): array {
+		$info = [
+			'Request' => [
+				'RequestOption' => 'nonvalidate',
+				'TransactionReference' => [
+					'CustomerContext' => 'Customer Comment',
+				],
+			],
+			'LabelSpecification' => [
+				'LabelPrintMethod' => [
+					'Code' => 'GIF',
+					'Description' => 'gif file',
+				],
+				'HTTPUserAgent' => 'Mozilla/4.5',
+				'LabelImageFormat' => [
+					'Code' => 'GIF',
+					'Description' => 'gif',
+				],
+			],
+			'Shipment' => [
+				'Description' => $this->packages[0]->description,
+				'Shipper' => $this->shipper->get_info(),
+				'ShipTo' => $this->ship_to->get_info(),
+				'ShipFrom' => $this->ship_from->get_info(),
+				'PaymentInformation' => [
+					'ShipmentCharge' => [
+						'Type' => '01',
+						'BillShipper' => [
+							'AccountNumber' => \Tigron\Ups\Config::$account_number,
+						],
+					],
+				],
+				'Service' => $this->service->get_info(),
+				'Package' => [],
+			],
+			'ShipmentServiceOptions' => [],
+		];
+		foreach ($this->packages as $package) {
+			$info['Shipment']['Package'][] = $package->get_info();
+		}
+
+		if (count($this->notifications) > 0) {
+			$info['Shipment']['ShipmentServiceOptions']['Notification'] = [];
+			foreach ($this->notifications as $notification) {
+				$info['Shipment']['ShipmentServiceOptions']['Notification'][] = $notification->get_info();
+			}
+		}
+
+		if ($this->internationalforms !== null) {
+			$info['Shipment']['ShipmentServiceOptions']['InternationalForms'] = $this->internationalforms->get_info();
+		}
+
+		$info['Shipment']['Shipper']['ShipperNumber'] = Config::$account_number;
+		return [ 'ShipmentRequest' => $info ];
+	}
+
+	/**
+	 * Start shipment
+	 *
+	 * @access public
 	 * @return array $response
 	 */
-	public function confirm() {
-
-		if (!isset($this->shipper)) {
-			throw new \Exception('Shipper is not set, use "set_shipper()" to define one');
-		}
-
-		if (!isset($this->ship_from)) {
-			throw new \Exception('Ship_From is not set, use "set_ship_from()" to define one');
-		}
-
-		if (!isset($this->ship_to)) {
-			throw new \Exception('Recipient ship_to is not set, use "set_ship_to()" to define one');
-		}
-
-		if (!isset($this->sold_to)) {
-			throw new \Exception('Recipient sold_to is not set, use "set_sold_to()" to define one');
-		}
-
-		if (count($this->packages) == 0) {
-			throw new \Exception('Add package first. Use "add_package()" to add one');
-		}
-
-		if (!isset($this->service)) {
-			throw new \Exception('No service set, use "set_service()" to add one');
-		}
-
-
-		$template = Template::get();
-		$template->assign('shipper', $this->shipper);
-		$template->assign('ship_from', $this->ship_from);
-		$template->assign('sold_to', $this->sold_to);
-		$template->assign('ship_to', $this->ship_to);
-		$template->assign('packages', $this->packages);
-		$template->assign('service', $this->service);
-		$template->assign('notifications', $this->notifications);
-		$template->assign('internationalforms', $this->internationalforms);
-
-		$xml = $template->render('call/ShipConfirm.twig');
-
-		$result = $this->call('ShipConfirm', $xml);
-		return $result;
-	}
-
-	/**
-	 * Accept shipping
-	 *
-	 * @access public
-	 * @param string $digest
-	 */
-	public function accept($digest) {
-		$template = Template::get();
-		$template->assign('digest', $digest);
-		$xml = $template->render('call/ShipAccept.twig');
-		$result = $this->call('ShipAccept', $xml);
-		return $result;
-	}
-
-	/**
-	 * Get label
-	 *
-	 * @access public
-	 * @param string $tracking
-	 */
-	public function get_label($tracking) {
-		$template = Template::get();
-		$template->assign('tracking', $tracking);
-		$xml = $template->render('call/LabelRecovery.twig');
-		$result = $this->call('LabelRecovery', $xml);
-
-		return $result;
+	public function handle() {
+		$client = Client::get();
+		return $client->request('POST', '/shipments/' . Config::$api_version . '/ship', $this->get_info());
 	}
 }

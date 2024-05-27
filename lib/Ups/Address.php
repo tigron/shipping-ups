@@ -157,38 +157,39 @@ class Address {
 	}
 
 	/**
-	 * Render
+	 * Get info
 	 *
 	 * @access public
-	 * @return string $xml
+	 * @return array<string> $info
 	 */
-	public function render() {
+	public function get_info(): array {
+		$info = [];
+		$info['AddressLine'] = substr($this->line1 . ' ' . $this->line2 . ' ' . $this->line3, 0, 35);
+		$info['City'] = $this->city;
+		$info['PostalCode'] = $this->zipcode;
+		if ($this->country === 'US') {
+			$info['StateProviceCode'] = $this->get_us_state();
+		}
+		if ($this->country === 'CA') {
+			$info['StateProviceCode'] = $this->address->get_canada_state();
+		}
+		if ($this->country === 'IE') {
+			$info['StateProviceCode'] = substr($this->zipcode, 0, 3);
+		}
+		if (!empty($this->state_code)) {
+			$info['StateProvinceCode'] = $this->state_code;
+		}
+		$info['CountryCode'] = $this->country;
+
 		/**
 		 * UPS Exceptions
 		 */
-		if ($this->country == 'AT') {
-			if ($this->zipcode == 6691) {
-				$this->zipcode = 87491;
-				$this->country = 'DE';
-			} elseif ($this->zipcode == 6991) {
-				$this->zipcode = 87567;
-				$this->country = 'DE';
-			} elseif ($this->zipcode == 6992) {
-				$this->zipcode = 87568;
-				$this->country = 'DE';
-			} elseif ($this->zipcode == 6993) {
-				$this->zipcode = 87569;
-				$this->country = 'DE';
+		if ($this->country == 'ES') {
+			$zipcodes = [ 52001, 52002, 52003, 52004, 52005, 52006, 52070, 52071, 52080 ]; // source: https://worldpostalcode.com/spain/melilla
+			if (in_array($this->zipcode, $zipcodes)) {
+				$info['CountryCode'] = 'XL'; // Melilla is part of Spain but located in northwest coast of Africa, sharing a border with Morocco
 			}
 		}
-
-		$this->line1 = Util::replace_unsupported_characters($this->line1);
-		$this->line2 = Util::replace_unsupported_characters($this->line2);
-		$this->line3 = Util::replace_unsupported_characters($this->line3);
-		$this->city  = Util::replace_unsupported_characters($this->city);
-
-		$template = Template::get();
-		$template->assign('address', $this);
-		return $template->render('object/address.twig');
+		return $info;
 	}
 }

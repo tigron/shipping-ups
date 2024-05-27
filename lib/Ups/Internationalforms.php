@@ -99,14 +99,25 @@ class Internationalforms {
 	}
 
 	/**
-	 * Render
+	 * Get info
 	 *
 	 * @access public
-	 * @return string $xml
+	 * return array<string> $info
 	 */
-	public function render() {
-		$template = Template::get();
-		$template->assign('internationalforms', $this);
-		return $template->render('object/internationalforms.twig');
+	public function get_info(): array {
+		$info = [
+			'FormType' => $this->type,
+			'Product' => [],
+			'CurrencyCode' => 'EUR',
+			'InvoiceDate' => date('Ymd'),
+			'ReasonForExport' => $this->export_reason,
+			'Contacts' => [
+				'SoldTo' => $this->soldto->get_info(),
+			],
+		];
+		foreach ($this->products as $product) {
+			$info['Product'][] = $product->get_info();
+		}
+		return $info;
 	}
 }

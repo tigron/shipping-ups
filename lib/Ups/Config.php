@@ -70,7 +70,7 @@ class Config {
 	 * @access public
 	 * @var string $secrect_key
 	 */
-	public static $secrect_key = null;
+	public static $client_secret = null;
 
 	/**
 	 * API Version
@@ -80,7 +80,7 @@ class Config {
 	 * @access public
 	 * @var string $api_version
 	 */
-	public static $api_version = null;
+	public static $api_version = 'v2403';
 
 	/**
 	 * Test/production
@@ -97,6 +97,15 @@ class Config {
 	 * @var string $logfile
 	 */
 	public static $logfile = null;
+
+	/**
+	 * access_token_file
+	 * If not set, default to sys_get_temp_dir() . '/ups.token'
+	 *
+	 * @access public
+	 * @var string $access_token_file
+	 */
+	public static $access_token_file = null;
 
 	/**
 	 * Socket timeout

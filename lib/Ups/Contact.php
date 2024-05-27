@@ -116,50 +116,39 @@ class Contact {
 	}
 
 	/**
-	 * Render
+	 * Get info
 	 *
 	 * @access public
-	 * @return string $xml
+	 * @return array<string> $info
 	 */
-	public function render() {
-		$template = Template::get();
+	public function get_info(): array {
+		$info = [];
+		if (empty($this->company)) {
+			$info['Name'] = substr($this->firstname . ' ' . $this->lastname, 0, 35);
+		} else {
+			$info['Name'] = substr($this->company, 0, 35);
+		}
+		$info['AttentionName'] = substr($this->firstname . ' ' . $this->lastname, 0, 35);
+		if (!empty($this->company)) {
+			$info['CompanyDisplayableName'] = substr($this->company, 0, 35);
+		}
+		if (!empty($this->vat)) {
+			$info['TaxIdentificationNumber'] = $this->vat;
+		}
+		if (!empty($this->phone)) {
+			$info['Phone']['Number'] = $this->phone;
+		}
+		if (!empty($this->fax)) {
+			$info['FaxNumber'] = $this->fax;
+		}
+		if (!empty($this->email)) {
+			$info['EMailAddress'] = $this->email;
+		}
+		$info['Address'] = $this->address->get_info();
 
-		$this->company   = Util::replace_unsupported_characters($this->company);
-		$this->firstname = Util::replace_unsupported_characters($this->firstname);
-		$this->lastname  = Util::replace_unsupported_characters($this->lastname);
+		$info['CompanyDisplayableName'] = Util::replace_unsupported_characters($info['CompanyDisplayableName']);
+		$info['AttentionName'] = Util::replace_unsupported_characters($info['AttentionName']);
 
-		$template->assign('contact', $this);
-		return $template->render('object/contact/contact.twig');
-	}
-
-	/**
-	 * Render shipper
-	 *
-	 * For some reason, UPS uses another XML schema for a shipper
-	 * The data is identical but field names are different
-	 *
-	 * @access public
-	 * @return string $xml
-	 */
-	public function render_shipper() {
-		$template = Template::get();
-		$template->assign('contact', $this);
-		$template->assign('user_id', Config::$user_id);
-		return $template->render('object/contact/shipper.twig');
-	}
-
-	/**
-	 * Render soldto
-	 *
-	 * For some other reason, UPS uses yet another XML schema for a 'soldTo'
-	 * The data is identical but field names are different
-	 *
-	 * @access public
-	 * @return string $xml
-	 */
-	public function render_soldto() {
-		$template = Template::get();
-		$template->assign('contact', $this);
-		return $template->render('object/contact/soldto.twig');
+		return $info;
 	}
 }

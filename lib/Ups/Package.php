@@ -60,15 +60,32 @@ class Package {
 	public $additional_handling = false;
 
 	/**
-	 * Render the object
+	 * Get info
 	 *
 	 * @access public
-	 * @return string $xml
+	 * @return array<string> $info
 	 */
-	public function render() {
-		$template = Template::get();
-		$template->assign('package', $this);
-		return $template->render('object/package.twig');
+	public function get_info(): array {
+		$info = [
+			'Packaging' => $this->type->get_info(),
+			'Dimensions' => [
+				'UnitOfMeasurement' => [
+					'Code' => 'CM',
+					'Description' => 'Centimeters',
+				],
+				'Length' => (string)5,
+				'Width' => (string)5,
+				'Height' => (string)5,
+			],
+			'PackageWeight' => [
+				'UnitOfMeasurement' => [
+					'Code' => 'KGS',
+					'Description' => 'Kilograms',
+				],
+				'Weight' => (string)$this->weight,
+			],
+		];
+		return $info;
 	}
 
 }

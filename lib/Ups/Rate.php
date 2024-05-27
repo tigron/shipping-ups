@@ -8,35 +8,144 @@
  */
 namespace Tigron\Ups;
 
-class Rate extends Client {
+class Rate {
 
 	/**
-	 * Validate an Address to UPS AddressValidation API
+	 * Shipper
+	 *
+	 * @var \Tigron\Ups\Contact $shipper
+	 * @access private
+	 */
+	private $shipper = null;
+
+	/**
+	 * Ship_From
+	 *
+	 * @var \Tigron\Ups\Contact $ship_from
+	 * @access private
+	 */
+	private $ship_from = null;
+
+	/**
+	 * Ship To
+	 *
+	 * @var \Tigron\Ups\Contact $ship_to
+	 * @access private
+	 */
+	private $ship_to = null;
+
+	/**
+	 * Package
+	 *
+	 * @var array $packages
+	 * @access private
+	 */
+	private $packages = [];
+
+	/**
+	 * Service
+	 *
+	 * @var \Tigron\Ups\Service $service
+	 * @access private
+	 */
+	private $service = null;
+
+	/**
+	 * Set shipper
 	 *
 	 * @access public
 	 * @param \Tigron\Ups\Contact $shipper
-	 * @param \Tigron\Ups\Contact $recipient
-	 * @param array $packages
-	 * @param \Tigron\Ups\Service $service
-	 * @return array $response
 	 */
-	public function rate(\Tigron\Ups\Contact $shipper, \Tigron\Ups\Contact $recipient, $packages, \Tigron\Ups\Service $service, \Tigron\Ups\Contact $ship_from = null) {
-
-		$template = Template::get();
-		$template->assign('shipper', $shipper);
-		if ($ship_from === null) {
-			$template->assign('ship_from', $shipper);
-		} else {
-			$template->assign('ship_from', $ship_from);
-		}
-		$template->assign('recipient', $recipient);
-		$template->assign('packages', $packages);
-		$template->assign('service', $service);
-		$json = $template->render('call/rate.twig');
-
-		$result = $this->call('rating', 'Rate', $json);
-		return $result;
+	public function set_shipper(\Tigron\Ups\Contact $shipper) {
+		$this->shipper = $shipper;
 	}
 
+	/**
+	 * Set ship_from
+	 *
+	 * @access public
+	 * @param \Tigron\Ups\Contact $ship_from
+	 */
+	public function set_ship_from(\Tigron\Ups\Contact $ship_from) {
+		$this->ship_from = $ship_from;
+	}
 
+	/**
+	 * Set ship_to
+	 *
+	 * @access public
+	 * @param \Tigron\Ups\Contact $recipient
+	 */
+	public function set_ship_to(\Tigron\Ups\Contact $recipient) {
+		$this->ship_to = $recipient;
+	}
+
+	/**
+	 * Add package
+	 *
+	 * @access public
+	 * @param \Tigron\Ups\Package $package
+	 */
+	public function add_package(\Tigron\Ups\Package $package) {
+		$this->packages[] = $package;
+	}
+
+	/**
+	 * Set Service
+	 *
+	 * @access public
+	 * @param \Tigron\Ups\Service $serice
+	 */
+	public function set_service(\Tigron\Ups\Service $service) {
+		$this->service = $service;
+	}
+
+	/**
+	 * Get info
+	 *
+	 * @access public
+	 */
+	public function get_info(): array {
+		$info = [
+			'Request' => [
+				'TransactionReference' => [
+					'CustomerContext' => 'Customer Comment',
+				],
+			],
+			'Shipment' => [
+				'Shipper' => $this->shipper->get_info(),
+				'ShipFrom' => $this->shipper->get_info(),
+				'ShipTo' => $this->ship_to->get_info(),
+				'PaymentInformation' => [
+					'ShipmentCharge' => [
+						'Type' => '01',
+						'BillShipper' => [
+							'AccountNumber' => \Tigron\Ups\Config::$account_number,
+						],
+					],
+				],
+				'Service' => $this->service->get_info(),
+				'Package' => [],
+			],
+		];
+		if ($this->ship_from !== null) {
+			$info['Shipment']['ShipFrom'] = $this->ship_from->get_info();
+		}
+		foreach ($this->packages as $package) {
+			$info['Shipment']['Package'][] = $package->get_info();
+		}
+
+		return [ 'RateRequest' => $info ];
+	}
+
+	/**
+	 * Rate a shipment
+	 *
+	 * @access public
+	 * @return array $response
+	 */
+	public function rate() {
+		$client = Client::get();
+		return $client->request('POST', '/rating/' . Config::$api_version . '/rate', $this->get_info());
+	}
 }

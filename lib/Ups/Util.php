@@ -27,7 +27,7 @@ class Util {
 		$patterns[ 8] = '/Ģ|ģ/';			$replacements[ 8] = 'G';
 		$patterns[ 9] = '/Ī|ī/';			$replacements[ 9] = 'I';
 		$patterns[10] = '/Ķ|ķ/';			$replacements[10] = 'K';
-		$patterns[11] = '/Ū|ū/';			$replacements[11] = 'U';
+		$patterns[11] = '/Ū|ū|ü/';			$replacements[11] = 'U';
 		$patterns[12] = '/ý|Ý/';			$replacements[12] = 'Y';
 		$patterns[13] = '/ť|Ť/';			$replacements[13] = 'T';
 		$patterns[14] = '/ř|Ř/';			$replacements[14] = 'R';

@@ -11,18 +11,21 @@ namespace Tigron\Ups;
 class Track extends Client {
 
 	/**
-	 * Validate an Address to UPS AddressValidation API
+	 * Tracking number
 	 *
 	 * @access public
-	 * @param string $tracking_number
-	 * @return array $response
+	 * @var string $tacking_number
 	 */
-	public function track($tracking_number) {
-		$template = Template::get();
-		$template->assign('tracking_number', $tracking_number);
-		$json = $template->render('call/track.twig');
-		$result = $this->call('track', 'details/' . $tracking_number, '{}', 'GET', [],'v1');
-		return $result;
-	}
+	public $tracking_number = null;
 
+	/**
+	 * Rate a shipment
+	 *
+	 * @access public
+	 * @return array<string> $response
+	 */
+	public function track(): array {
+		$client = Client::get();
+		return $client->request('GET', '/track/v1/details/' . $this->tracking_number, []);
+	}
 }

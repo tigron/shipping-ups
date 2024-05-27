@@ -143,15 +143,24 @@ class Product {
 	public $value = null;
 
 	/**
-	 * Render
+	 * Get info
 	 *
 	 * @access public
-	 * @return string $xml
 	 */
-	public function render() {
-		$template = Template::get();
-		$template->assign('product', $this);
-		return $template->render('object/product.twig');
+	public function get_info() {
+		$info = [
+			'Description' => $this->get_description_parts(),
+			'Unit' => [
+				'Number' => (string)$this->quantity,
+				'UnitOfMeasurement' => [
+					'Code' => $this->measurement_code,
+					'Description' => $this->measurement_description[$this->measurement_code],
+				],
+				'Value' => (string)$this->value,
+			],
+			'OriginCountryCode' => $this->origin_country,
+		];
+		return $info;
 	}
 
 	/**
