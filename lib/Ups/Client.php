@@ -40,7 +40,7 @@ class Client {
 	 *
 	 * @access public
 	 */
-	public function __construct() {
+	private function __construct() {
 		$base_uri = 'https://onlinetools.ups.com/';
 		if (Config::$mode == 'test') {
 			$base_uri = 'https://wwwcie.ups.com/';
@@ -49,6 +49,11 @@ class Client {
 		$this->guzzle = new \GuzzleHttp\Client([
 			'base_uri' => $base_uri,
 			'http_errors' => false,
+
+			'handler' => $this->create_logging_handler_stack([
+				'{method} {uri} HTTP/{version} {req_body} - {req_headers}',
+				"RESPONSE: {code} - {res_body}\n"
+			]),
 		]);
 	}
 
@@ -180,6 +185,46 @@ class Client {
 	}
 
 	/**
+	 * Create logging handler stack
+	 *
+	 * @access public
+	 * @param array $message_formats
+	 * @return HandlerStack $stack
+	 */
+	private function create_logging_handler_stack(array $message_formats): \GuzzleHttp\HandlerStack {
+		$stack = \GuzzleHttp\HandlerStack::create();
+		foreach ($message_formats as $message_format) {
+			$stack->unshift(
+				$this->get_logger($message_format)
+			);
+		}
+
+		return $stack;
+	}
+
+	/**
+	 * Get logger
+	 *
+	 * @access public
+	 * @param string $message_format
+	 * @return
+	 */
+	private function get_logger(string $message_format) {
+		if (empty($this->logger)) {
+			$this->logger = new \Monolog\Logger('tigron/shipping-ups');
+			$formatter = new \Monolog\Formatter\LineFormatter(null, null, true, true);
+			$handler = new \Monolog\Handler\StreamHandler(Config::$logfile);
+			$handler->setFormatter($formatter);
+			$this->logger->pushHandler($handler);
+		}
+
+		return \GuzzleHttp\Middleware::log(
+			$this->logger,
+			new \GuzzleHttp\MessageFormatter($message_format)
+		);
+	}
+
+	/**
 	 * Get a client
 	 *
 	 * @access public
@@ -192,5 +237,4 @@ class Client {
 		}
 		return self::$client;
 	}
-
 }

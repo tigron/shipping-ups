@@ -8,7 +8,7 @@
  */
 namespace Tigron\Ups;
 
-class Track extends Client {
+class Track {
 
 	/**
 	 * Tracking number

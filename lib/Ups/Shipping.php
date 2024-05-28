@@ -8,7 +8,7 @@
  */
 namespace Tigron\Ups;
 
-class Shipping extends Client {
+class Shipping {
 
 	/**
 	 * Shipper
