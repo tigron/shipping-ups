@@ -215,7 +215,10 @@ class Shipping {
 			'ShipmentServiceOptions' => [],
 		];
 		foreach ($this->packages as $package) {
-			$info['Shipment']['Package'][] = $package->get_info();
+			$package_info = $package->get_info();
+			$package_info['Packaging'] = $package_info['PackagingType'];
+			unset($package_info['PackagingType']);
+			$info['Shipment']['Package'][] = $package_info;
 		}
 
 		if (count($this->notifications) > 0) {

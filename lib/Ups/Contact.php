@@ -146,8 +146,12 @@ class Contact {
 		}
 		$info['Address'] = $this->address->get_info();
 
-		$info['CompanyDisplayableName'] = Util::replace_unsupported_characters($info['CompanyDisplayableName']);
-		$info['AttentionName'] = Util::replace_unsupported_characters($info['AttentionName']);
+		if (!empty($info['CompanyDisplayableName'])) {
+			$info['CompanyDisplayableName'] = Util::replace_unsupported_characters($info['CompanyDisplayableName']);
+		}
+		if (!empty($info['AttentionName'])) {
+			$info['AttentionName'] = Util::replace_unsupported_characters($info['AttentionName']);
+		}
 
 		return $info;
 	}
