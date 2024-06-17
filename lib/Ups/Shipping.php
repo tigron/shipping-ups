@@ -75,6 +75,14 @@ class Shipping {
 	private $internationalforms = null;
 
 	/**
+	 * Any extra information about the shipment
+	 *
+	 * @var array
+	 * @access private
+	 */
+	private $extra_information = [];
+
+	/**
 	 * Set shipper
 	 *
 	 * @access public
@@ -172,6 +180,16 @@ class Shipping {
 	}
 
 	/**
+	 * Set extra information
+	 *
+	 * @access public
+	 * @param array $extra_information
+	 */
+	public function set_extra_information(array $extra_information): void {
+		$this->extra_information = $extra_information;
+	}
+
+	/**
 	 * Get info
 	 *
 	 * @access public
@@ -233,6 +251,7 @@ class Shipping {
 		}
 
 		$info['Shipment']['Shipper']['ShipperNumber'] = Config::$account_number;
+		$info = array_merge_recursive($info, $this->extra_information);
 		return [ 'ShipmentRequest' => $info ];
 	}
 
