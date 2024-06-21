@@ -168,13 +168,13 @@ class Address {
 		$info['City'] = $this->city;
 		$info['PostalCode'] = $this->zipcode;
 		if ($this->country === 'US') {
-			$info['StateProviceCode'] = $this->get_us_state();
+			$info['StateProvinceCode'] = $this->get_us_state();
 		}
 		if ($this->country === 'CA') {
-			$info['StateProviceCode'] = $this->address->get_canada_state();
+			$info['StateProvinceCode'] = $this->address->get_canada_state();
 		}
 		if ($this->country === 'IE') {
-			$info['StateProviceCode'] = substr($this->zipcode, 0, 3);
+			$info['StateProvinceCode'] = substr($this->zipcode, 0, 3);
 		}
 		if (!empty($this->state_code)) {
 			$info['StateProvinceCode'] = $this->state_code;
