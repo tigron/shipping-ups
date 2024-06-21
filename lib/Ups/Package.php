@@ -67,6 +67,7 @@ class Package {
 	 */
 	public function get_info(): array {
 		$info = [
+			'Description' => $this->description,
 			'PackagingType' => $this->type->get_info(),
 			'Dimensions' => [
 				'UnitOfMeasurement' => [
