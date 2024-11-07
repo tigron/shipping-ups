@@ -112,7 +112,7 @@ class Internationalforms {
 			'InvoiceDate' => date('Ymd'),
 			'ReasonForExport' => $this->export_reason,
 			'Contacts' => [
-				'SoldTo' => $this->soldto->get_info(),
+				'SoldTo' => $this->soldto->get_info('SoldTo'),
 			],
 		];
 		foreach ($this->products as $product) {

@@ -160,9 +160,10 @@ class Address {
 	 * Get info
 	 *
 	 * @access public
+	 * @param string $format
 	 * @return array<string> $info
 	 */
-	public function get_info(): array {
+	public function get_info(string $format = ''): array {
 		$info = [];
 		$info['AddressLine'] = substr($this->line1 . ' ' . $this->line2 . ' ' . $this->line3, 0, 35);
 		$info['City'] = $this->city;
@@ -189,6 +190,9 @@ class Address {
 			if (in_array($this->zipcode, $zipcodes)) {
 				$info['CountryCode'] = 'XL'; // Melilla is part of Spain but located in northwest coast of Africa, sharing a border with Morocco
 			}
+		}
+		if ($this->country == 'IC' && $format === 'SoldTo') {
+			$info['CountryCode'] = 'ES'; // Canary Islands are an overseas territory of Spain, but with its own duty zone.
 		}
 		return $info;
 	}

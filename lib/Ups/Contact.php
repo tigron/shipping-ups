@@ -119,9 +119,10 @@ class Contact {
 	 * Get info
 	 *
 	 * @access public
+	 * @param string $format
 	 * @return array<string> $info
 	 */
-	public function get_info(): array {
+	public function get_info(string $format = ''): array {
 		$info = [];
 		if (empty($this->company)) {
 			$info['Name'] = substr($this->firstname . ' ' . $this->lastname, 0, 35);
@@ -144,7 +145,7 @@ class Contact {
 		if (!empty($this->email)) {
 			$info['EMailAddress'] = $this->email;
 		}
-		$info['Address'] = $this->address->get_info();
+		$info['Address'] = $this->address->get_info($format);
 
 		if (!empty($info['CompanyDisplayableName'])) {
 			$info['CompanyDisplayableName'] = Util::replace_unsupported_characters($info['CompanyDisplayableName']);
